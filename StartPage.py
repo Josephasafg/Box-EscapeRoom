@@ -1,7 +1,7 @@
 import tkinter.messagebox
 from tkinter import *
 from tkinter import ttk
-from PageOne import PageOne
+from Game import Game
 
 LARGE_FONT = ("verdana", 14)
 
@@ -22,7 +22,7 @@ class StartPage(Frame):
                             command=lambda: self.check_clock_amount(self.clock_amount_entry.get()))
 
         # button = ttk.Button(self, text="Enter",
-        #                     command=lambda: controller.show_frame(PageOne))
+        #                     command=lambda: controller.show_frame(Game))
         button.pack()
 
     def check_clock_amount(self, amount):
@@ -31,5 +31,5 @@ class StartPage(Frame):
             self.clock_amount_entry.delete("0", END)
             tkinter.messagebox.showwarning("Warning", "Input must be between 1-4")
         else:
-            PageOne.amount_of_groups = int_amount
-            self.controller.show_frame(PageOne)
+            Game.amount_of_groups = int_amount
+            self.controller.show_frame(Game)

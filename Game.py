@@ -8,7 +8,7 @@ from Group import Group
 LARGE_FONT = ("verdana", 14)
 
 
-class PageOne(Frame):
+class Game(Frame):
     amount_of_groups = 1
 
     def __init__(self, parent, controller):

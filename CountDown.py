@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from StartPage import StartPage
-from PageOne import PageOne
+from Game import Game
 LARGE_FONT = ("verdana", 14)
 
 
@@ -18,7 +18,7 @@ class CountDown(Tk):
 
         self.frames = dict()
 
-        for f in (StartPage, PageOne):
+        for f in (StartPage, Game):
             frame = f(container, self)
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky=NSEW)
