@@ -18,7 +18,7 @@ class PageOne(Frame):
         self.group_name = "Group "
         self.stop_flag = False
         pygame.mixer.init()
-        pygame.mixer.music.load("DY.ogg")
+        pygame.mixer.music.load("Music/DY.ogg")
         self.group_list = list()
         self.get_ready = ttk.Button(self, text="Create Groups", width=100,
                                     command=self.create_groups)
