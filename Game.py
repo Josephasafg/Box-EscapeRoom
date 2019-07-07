@@ -10,6 +10,7 @@ LARGE_FONT = ("verdana", 14)
 
 class Game(Frame):
     amount_of_groups = 1
+    penalty = 300
 
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
@@ -51,7 +52,7 @@ class Game(Frame):
             group_name = self.group_name + str(index) + ": "
             label = Label(self, text=group_name + self.time_string, font=LARGE_FONT, compound=CENTER)
             code_label = Label(self, text="Insert 4 digit code: ", font=LARGE_FONT, compound=CENTER)
-            code_entry = Entry(self)
+            code_entry = Entry(self, show="*")
             code_button = ttk.Button(self, text="Enter", command=self.check_code)
             group = Group(index, label, group_name, code_label, code_entry, code_button)
             self.group_list.append(group)

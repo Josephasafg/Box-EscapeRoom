@@ -1,9 +1,11 @@
 import tkinter.messagebox
 from tkinter import *
 from tkinter import ttk
+from DropDown import DropDown
 from Game import Game
 
 LARGE_FONT = ("verdana", 14)
+MEDIUM_FONT = ("verdana", 10)
 
 
 class StartPage(Frame):
@@ -14,7 +16,7 @@ class StartPage(Frame):
         self.show_main()
 
     def show_main(self):
-        clock_amount_label = Label(self, text="Insert amount of clocks - ", font=LARGE_FONT)
+        clock_amount_label = Label(self, text="Insert amount of groups: (1-6)", font=LARGE_FONT)
         clock_amount_label.pack(pady=10, padx=10)
 
         self.clock_amount_entry.pack(pady=11, padx=11)
@@ -27,9 +29,9 @@ class StartPage(Frame):
 
     def check_clock_amount(self, amount):
         int_amount = int(amount)
-        if int_amount > 4 or int_amount < 1:
+        if int_amount > 6 or int_amount < 1:
             self.clock_amount_entry.delete("0", END)
-            tkinter.messagebox.showwarning("Warning", "Input must be between 1-4")
+            tkinter.messagebox.showwarning("Warning", "Input must be between 1-6")
         else:
             Game.amount_of_groups = int_amount
-            self.controller.show_frame(Game)
+            self.controller.show_frame(DropDown)
