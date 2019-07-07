@@ -20,7 +20,7 @@ class CountDown(Tk):
 
         self.frames = dict()
 
-        for f in (StartPage, Game, DropDown):
+        for f in (StartPage, DropDown):
             frame = f(self.container, self)
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky=NSEW)

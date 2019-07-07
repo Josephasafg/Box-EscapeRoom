@@ -11,6 +11,7 @@ LARGE_FONT = ("verdana", 14)
 class Game(Frame):
     amount_of_groups = 1
     penalty = 300
+    group_name_list = list()
 
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
@@ -21,12 +22,21 @@ class Game(Frame):
         pygame.mixer.init()
         pygame.mixer.music.load("Music/DY.ogg")
         self.group_list = list()
-        self.get_ready = ttk.Button(self, text="Create Groups", width=100,
-                                    command=self.create_groups)
-        self.get_ready.place(relx=0.5, rely=0.5, anchor=CENTER)
-
+        # self.get_ready = ttk.Button(self, text="Create Groups", width=100,
+        #                             command=self.create_groups)
+        # self.get_ready.place(relx=0.5, rely=0.5, anchor=CENTER)
         self.start_button = ttk.Button(self, text="Start",
                                        command=self.begin_game)
+        self.create_groups()
+
+
+    @classmethod
+    def set_name_list(cls, value):
+        cls.group_name_list = value
+
+    @classmethod
+    def get_name_list(cls):
+        return cls.group_name_list
 
     @classmethod
     def get_penalty(cls):
@@ -51,9 +61,10 @@ class Game(Frame):
 
     def create_groups(self):
         group_amount = self.updated_amount()
-        self.get_ready.destroy()
-        for index in range(1, group_amount + 1):
-            group_name = self.group_name + str(index) + ": "
+        # self.get_ready.destroy()
+        name_list = self.get_name_list()
+        for index, group_name in zip(range(1, group_amount + 1), name_list):
+            group_name = group_name + ": "
             label = Label(self, text=group_name + self.time_string, font=LARGE_FONT, compound=CENTER)
             code_label = Label(self, text="Insert 4 digit code: ", font=LARGE_FONT, compound=CENTER)
             code_entry = Entry(self, show="*")
