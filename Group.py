@@ -8,7 +8,7 @@ from tkinter import END
 
 class Group:
     def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
-                 code_button: Button, penalty: int, start_button: Button, pause_button: Button):
+                 code_button: Button, penalty: int, start_button: Button):
         self.time_string = time.strftime("60:00:00")
         self.stop_flag = False
         self.number = number
@@ -24,18 +24,17 @@ class Group:
         self.code_entry.configure(textvariable=self.code_entered)
         self.code_button = code_button
         self.start_button = start_button
-        self.pause_button = pause_button
         self.configure_music_buttons()
 
     def configure_music_buttons(self):
         self.start_button.configure(command=self.start_clock)
-        self.pause_button.configure(command=self.pause_clock)
-
-    def pause_clock(self):
-        self.stop_flag = True
+        # self.pause_button.configure(command=self.pause_clock)
 
     def start_clock(self):
-        self.stop_flag = False
+        if self.stop_flag:
+            self.stop_flag = False
+        else:
+            self.stop_flag = True
 
     @property
     def count(self):

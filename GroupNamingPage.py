@@ -23,8 +23,8 @@ class GroupNamingPage(Frame):
         for group in range(self.amount_of_groups):
             group_label = Label(self, text=f"Name of group number {group+1}: ",fg='white', bg='black', font=LARGE_FONT)
             group_name_entry = Entry(self)
-            group_label.pack(fill=X)
-            group_name_entry.pack()
+            group_label.pack(fill=X, padx=8, pady=8)
+            group_name_entry.pack(padx=10, pady=10)
             self.group_name_list_entry.append(group_name_entry)
 
     def get_all_names(self):

@@ -6,7 +6,7 @@ from tkinter import *
 from tkinter import ttk
 from Group import Group
 
-LARGE_FONT = ("verdana", 16)
+LARGE_FONT = ("verdana", 20)
 
 
 class Game(Frame):
@@ -21,12 +21,11 @@ class Game(Frame):
         self.time_string = time.strftime("60:00:00")
         self.group_name = "Group "
         self.stop_flag = False
+        self.pause = False
         pygame.mixer.init()
         pygame.mixer.music.load("Music/DY.ogg")
         self.group_list = list()
-        self.pause_button = ttk.Button(self, text="Pause",
-                                       command=self.stop_game)
-        self.start_button = ttk.Button(self, text="Start",
+        self.start_button = ttk.Button(self, text="Start/Pause Game",
                                        command=self.begin_game)
         self.create_groups()
 
@@ -49,43 +48,42 @@ class Game(Frame):
     def design_groups(self):
         for index, group in enumerate(self.group_list):
             if index % 2 == 0:
-                group.label.grid(row=0, column=index * 4, padx=10, pady=10, sticky=E)
-                group.code_label.grid(row=1, column=index * 4)
-                group.code_entry.grid(row=1, column=index * 4 + 1)
-                group.code_button.grid(row=2, column=index * 4 + 1)
-                group.start_button.grid(row=3, column=index * 4 + 1)
-                group.pause_button.grid(row=3, column=index * 4 + 2)
+                group.label.grid(row=2, column=index * 4, padx=10, pady=10, sticky=E)
+                # group.code_label.grid(row=1, column=index * 4, padx=10, pady=10)
+                group.code_entry.grid(row=5, column=index * 4 + 1, padx=10, pady=10)
+                group.code_button.grid(row=7, column=index * 4 + 1)
+                group.start_button.grid(row=8, column=index * 4 + 1, padx=10, pady=10)
             else:
-                group.label.grid(row=4, column=(index - 1) * 4, padx=10, pady=10, sticky=W)
-                group.code_label.grid(row=5, column=(index - 1) * 4)
-                group.code_entry.grid(row=5, column=(index - 1) * 4 + 1)
-                group.code_button.grid(row=6, column=(index - 1) * 4 + 1)
-                group.start_button.grid(row=7, column=(index - 1) * 4 + 1)
-                group.pause_button.grid(row=7, column=(index - 1) * 4 + 2)
+                group.label.grid(row=12, column=(index - 1) * 4, padx=10, pady=10, sticky=W)
+                # group.code_label.grid(row=5, column=(index - 1) * 4)
+                group.code_entry.grid(row=16, column=(index - 1) * 4 + 1, padx=10, pady=10)
+                group.code_button.grid(row=18, column=(index - 1) * 4 + 1)
+                group.start_button.grid(row=20, column=(index - 1) * 4 + 1, padx=10, pady=10)
 
-    def create_music_buttons(self) -> Tuple[Button, Button]:
-        start_button = ttk.Button(self, text="Play")
-        pause_button = ttk.Button(self, text="Pause")
-        return start_button, pause_button
+    def create_music_buttons(self) -> Button:
+        start_button = ttk.Button(self, text="Play/Pause")
+        return start_button
 
     def create_groups(self):
         group_amount = self.updated_amount()
         name_list = self.get_name_list()
         for index, group_name in zip(range(1, group_amount + 1), name_list):
             group_name = group_name + ": "
-            label = Label(self, text=group_name + self.time_string, font=LARGE_FONT, compound=CENTER,
-                          fg='white', bg='black')
-            code_label = Label(self, text="Insert 4 digit code: ", font=LARGE_FONT, compound=CENTER,
-                               fg='white', bg='black')
+            label = Label(self, text=group_name + self.time_string, font=LARGE_FONT,
+                          fg='white', bg='black', anchor='w')
+            code_label = Label(self, text="Insert 4 digit code: ", font=LARGE_FONT,
+                               fg='white', bg='black', anchor="w")
             code_entry = Entry(self, show="*")
             code_button = ttk.Button(self, text="Enter", command=self.check_code)
-            start_button, pause_button = self.create_music_buttons()
+            start_button = self.create_music_buttons()
             group = Group(index, label, group_name, code_label, code_entry, code_button,
-                          self.get_penalty(), start_button, pause_button)
+                          self.get_penalty(), start_button)
             self.group_list.append(group)
+
+        middle = self.winfo_screenwidth() // 2
+        self.start_button.grid(row=0, column=middle*2, padx=10, pady=10)
         self.design_groups()
-        self.start_button.place(relx=0.5, rely=0.5, anchor=CENTER)
-        self.pause_button.place(relx=0.4, rely=0.5, anchor=CENTER)
+        # self.pause_button.place(relx=0.4, rely=0.5, anchor=CENTER)
 
     def check_code(self):
         for group in self.group_list:
@@ -105,9 +103,15 @@ class Game(Frame):
         pygame.mixer.music.play(-1)
 
     def begin_game(self):
-        self.play_music()
-        self.stop_flag = False
-        self.game()
+        if not self.pause:
+            self.pause = True
+            self.play_music()
+            self.stop_flag = False
+            self.game()
+        else:
+            self.pause = False
+            self.stop_game()
+
 
     def game(self):
         if not self.stop_flag:
