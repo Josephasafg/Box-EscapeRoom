@@ -7,13 +7,15 @@ from tkinter import END
 
 
 class Group:
-    def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry, code_button: Button):
+    def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
+                 code_button: Button, penalty: int):
         self.time_string = time.strftime("60:00:00")
         self.number = number
         self.label = label
         self._count = 3600
         self.deduce = 1
         self.name = name
+        self.penalty = penalty
         self.code_label = code_label
         self.code_entered = StringVar()
         self.code_entered.trace('w', self.limit_characters)
@@ -53,7 +55,7 @@ class Group:
         if i_code == "1966":
             is_true = True
         else:
-            self.count -= 10
+            self.count -= self.penalty
             self.code_entry.delete("0", END)
 
         return is_true

@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from Game import Game
+from GroupNamingPage import GroupNamingPage
 
 OPTIONS = ["5 minutes", "10 minutes", "15 minutes"]
 
@@ -15,11 +16,10 @@ class DropDown(Frame):
         box_name = Label(self, text="Choose amount of penalty in minutes:", font=LARGE_FONT)
         box_name.pack(fill=X)
         self.current_table = StringVar()
-        # comboExample = ttk.Combobox(self, values=OPTIONS)
         comboExample = ttk.Combobox(self, textvariable=self.current_table, state="readonly",
                                     values=OPTIONS)
         comboExample.pack()
-        comboExample.current(1)
+        comboExample.current(0)
         next_button = ttk.Button(self, text="Next",
                                  command=lambda: self.go_to_next_page(self.current_table.get()))
         next_button.pack()
@@ -32,7 +32,8 @@ class DropDown(Frame):
     def go_to_next_page(self, combo_value):
         seconds = self.parse_value(combo_value)
         Game.penalty = seconds
-        self.controller.show_frame(Game)
+        self.controller.add_class_to_tuple(GroupNamingPage)
+        self.controller.show_frame(GroupNamingPage)
 
 
 

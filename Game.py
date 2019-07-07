@@ -29,6 +29,10 @@ class Game(Frame):
                                        command=self.begin_game)
 
     @classmethod
+    def get_penalty(cls):
+        return cls.penalty
+
+    @classmethod
     def updated_amount(cls):
         return cls.amount_of_groups
 
@@ -54,7 +58,7 @@ class Game(Frame):
             code_label = Label(self, text="Insert 4 digit code: ", font=LARGE_FONT, compound=CENTER)
             code_entry = Entry(self, show="*")
             code_button = ttk.Button(self, text="Enter", command=self.check_code)
-            group = Group(index, label, group_name, code_label, code_entry, code_button)
+            group = Group(index, label, group_name, code_label, code_entry, code_button, self.get_penalty())
             self.group_list.append(group)
         self.design_groups()
         self.start_button.place(relx=0.5, rely=0.5, anchor=CENTER)
