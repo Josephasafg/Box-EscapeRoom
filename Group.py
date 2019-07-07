@@ -8,8 +8,9 @@ from tkinter import END
 
 class Group:
     def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
-                 code_button: Button, penalty: int):
+                 code_button: Button, penalty: int, start_button: Button, pause_button: Button):
         self.time_string = time.strftime("60:00:00")
+        self.stop_flag = False
         self.number = number
         self.label = label
         self._count = 3600
@@ -22,6 +23,19 @@ class Group:
         self.code_entry = code_entry
         self.code_entry.configure(textvariable=self.code_entered)
         self.code_button = code_button
+        self.start_button = start_button
+        self.pause_button = pause_button
+        self.configure_music_buttons()
+
+    def configure_music_buttons(self):
+        self.start_button.configure(command=self.start_clock)
+        self.pause_button.configure(command=self.pause_clock)
+
+    def pause_clock(self):
+        self.stop_flag = True
+
+    def start_clock(self):
+        self.stop_flag = False
 
     @property
     def count(self):
@@ -37,17 +51,17 @@ class Group:
             self.code_entered.set(value[:4])
 
     def timer(self):
-        # if not self.stop_flag:
-        minute, seconds = divmod(self.count, 60)
-        if minute == 60:
-            hour = 60
-            self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, seconds, seconds)
-        else:
-            hour = 0
-            self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
+        if not self.stop_flag:
+            minute, seconds = divmod(self.count, 60)
+            if minute == 60:
+                hour = 60
+                self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, seconds, seconds)
+            else:
+                hour = 0
+                self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
 
-        self.count -= self.deduce
-        self.label.configure(text=self.name + self.time_string, fg="red")
+            self.count -= self.deduce
+            self.label.configure(text=self.name + self.time_string, fg="red")
             # self.after(1000, self.timer)
 
     def check_code(self, i_code):

@@ -1,6 +1,7 @@
 import pygame
 import time
 import tkinter.messagebox
+from typing import Tuple
 from tkinter import *
 from tkinter import ttk
 from Group import Group
@@ -23,13 +24,11 @@ class Game(Frame):
         pygame.mixer.init()
         pygame.mixer.music.load("Music/DY.ogg")
         self.group_list = list()
-        # self.get_ready = ttk.Button(self, text="Create Groups", width=100,
-        #                             command=self.create_groups)
-        # self.get_ready.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.pause_button = ttk.Button(self, text="Pause",
+                                       command=self.stop_game)
         self.start_button = ttk.Button(self, text="Start",
                                        command=self.begin_game)
         self.create_groups()
-
 
     @classmethod
     def set_name_list(cls, value):
@@ -54,15 +53,23 @@ class Game(Frame):
                 group.code_label.grid(row=1, column=index * 4)
                 group.code_entry.grid(row=1, column=index * 4 + 1)
                 group.code_button.grid(row=2, column=index * 4 + 1)
+                group.start_button.grid(row=3, column=index * 4 + 1)
+                group.pause_button.grid(row=3, column=index * 4 + 2)
             else:
                 group.label.grid(row=4, column=(index - 1) * 4, padx=10, pady=10, sticky=W)
                 group.code_label.grid(row=5, column=(index - 1) * 4)
                 group.code_entry.grid(row=5, column=(index - 1) * 4 + 1)
                 group.code_button.grid(row=6, column=(index - 1) * 4 + 1)
+                group.start_button.grid(row=7, column=(index - 1) * 4 + 1)
+                group.pause_button.grid(row=7, column=(index - 1) * 4 + 2)
+
+    def create_music_buttons(self) -> Tuple[Button, Button]:
+        start_button = ttk.Button(self, text="Play")
+        pause_button = ttk.Button(self, text="Pause")
+        return start_button, pause_button
 
     def create_groups(self):
         group_amount = self.updated_amount()
-        # self.get_ready.destroy()
         name_list = self.get_name_list()
         for index, group_name in zip(range(1, group_amount + 1), name_list):
             group_name = group_name + ": "
@@ -72,10 +79,13 @@ class Game(Frame):
                                fg='white', bg='black')
             code_entry = Entry(self, show="*")
             code_button = ttk.Button(self, text="Enter", command=self.check_code)
-            group = Group(index, label, group_name, code_label, code_entry, code_button, self.get_penalty())
+            start_button, pause_button = self.create_music_buttons()
+            group = Group(index, label, group_name, code_label, code_entry, code_button,
+                          self.get_penalty(), start_button, pause_button)
             self.group_list.append(group)
         self.design_groups()
         self.start_button.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.pause_button.place(relx=0.4, rely=0.5, anchor=CENTER)
 
     def check_code(self):
         for group in self.group_list:
