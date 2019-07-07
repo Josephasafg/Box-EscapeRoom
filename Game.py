@@ -5,7 +5,7 @@ from tkinter import *
 from tkinter import ttk
 from Group import Group
 
-LARGE_FONT = ("verdana", 14)
+LARGE_FONT = ("verdana", 16)
 
 
 class Game(Frame):
@@ -16,6 +16,7 @@ class Game(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.count = 3600
+        self.configure(background='black')
         self.time_string = time.strftime("60:00:00")
         self.group_name = "Group "
         self.stop_flag = False
@@ -65,8 +66,10 @@ class Game(Frame):
         name_list = self.get_name_list()
         for index, group_name in zip(range(1, group_amount + 1), name_list):
             group_name = group_name + ": "
-            label = Label(self, text=group_name + self.time_string, font=LARGE_FONT, compound=CENTER)
-            code_label = Label(self, text="Insert 4 digit code: ", font=LARGE_FONT, compound=CENTER)
+            label = Label(self, text=group_name + self.time_string, font=LARGE_FONT, compound=CENTER,
+                          fg='white', bg='black')
+            code_label = Label(self, text="Insert 4 digit code: ", font=LARGE_FONT, compound=CENTER,
+                               fg='white', bg='black')
             code_entry = Entry(self, show="*")
             code_button = ttk.Button(self, text="Enter", command=self.check_code)
             group = Group(index, label, group_name, code_label, code_entry, code_button, self.get_penalty())

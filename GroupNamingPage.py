@@ -4,11 +4,13 @@ from tkinter import ttk
 from Game import Game
 from Group import Group
 
+LARGE_FONT = ("verdana", 16)
 
 class GroupNamingPage(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.controller = controller
+        self.configure(background='black')
         self.amount_of_groups = Game.updated_amount()
         self.group_name_list_entry = list()
         self.group_name_list = list()
@@ -19,7 +21,7 @@ class GroupNamingPage(Frame):
 
     def create_group_boxes(self):
         for group in range(self.amount_of_groups):
-            group_label = Label(self, text=f"Name of group number {group+1}: ")
+            group_label = Label(self, text=f"Name of group number {group+1}: ",fg='white', bg='black', font=LARGE_FONT)
             group_name_entry = Entry(self)
             group_label.pack(fill=X)
             group_name_entry.pack()

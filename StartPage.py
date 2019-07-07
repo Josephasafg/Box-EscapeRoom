@@ -4,19 +4,20 @@ from tkinter import ttk
 from DropDown import DropDown
 from Game import Game
 
-LARGE_FONT = ("verdana", 14)
+LARGE_FONT = ("verdana", 16)
 MEDIUM_FONT = ("verdana", 10)
 
 
 class StartPage(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
+        self.configure(background='black')
         self.controller = controller
         self.clock_amount_entry = Entry(self)
         self.show_main()
 
     def show_main(self):
-        clock_amount_label = Label(self, text="Insert amount of groups: (1-6)", font=LARGE_FONT)
+        clock_amount_label = Label(self, text="Insert amount of groups: (1-6)", font=LARGE_FONT, fg='white', bg='black')
         clock_amount_label.pack(pady=10, padx=10)
 
         self.clock_amount_entry.pack(pady=11, padx=11)
