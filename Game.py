@@ -16,6 +16,10 @@ class Game(Frame):
 
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
+        for r in range(self.winfo_screenwidth()):
+            self.grid_rowconfigure(r, weight=1)
+        for c in range(self.winfo_screenheight()):
+            self.grid_columnconfigure(c, weight=1)
         self.count = 3600
         self.configure(background='black')
         self.time_string = time.strftime("60:00:00")
@@ -48,40 +52,107 @@ class Game(Frame):
     def design_groups(self):
         for index, group in enumerate(self.group_list):
             if index % 2 == 0:
-                group.label.grid(row=2, column=index * 4, padx=10, pady=10, sticky=E)
-                # group.code_label.grid(row=1, column=index * 4, padx=10, pady=10)
-                group.code_entry.grid(row=5, column=index * 4 + 1, padx=10, pady=10)
-                group.code_button.grid(row=7, column=index * 4 + 1)
-                group.start_button.grid(row=8, column=index * 4 + 1, padx=10, pady=10)
+                group.label.pack(padx=10, pady=10)
+                # group.code_label.pack()
+                group.code_entry.pack(padx=5, pady=5)
+                group.code_button.pack(padx=5, pady=5)
+                group.start_button.pack(side=TOP, padx=10, pady=10)
             else:
-                group.label.grid(row=12, column=(index - 1) * 4, padx=10, pady=10, sticky=W)
-                # group.code_label.grid(row=5, column=(index - 1) * 4)
-                group.code_entry.grid(row=16, column=(index - 1) * 4 + 1, padx=10, pady=10)
-                group.code_button.grid(row=18, column=(index - 1) * 4 + 1)
-                group.start_button.grid(row=20, column=(index - 1) * 4 + 1, padx=10, pady=10)
+                group.label.pack(padx=10, pady=30)
+                # group.code_label.pack()
+                group.code_entry.pack(padx=5, pady=5)
+                group.code_button.pack(padx=5, pady=5)
+                group.start_button.pack(side=TOP, padx=10, pady=10)
 
-    def create_music_buttons(self) -> Button:
-        start_button = ttk.Button(self, text="Play/Pause")
+    def create_music_buttons(self, frame) -> Button:
+        start_button = ttk.Button(frame, text="Play/Pause")
         return start_button
+
+    def create_sub_frame(self,row, col, r_span, c_span) -> Frame:
+        f = Frame(self, highlightbackground='red', highlightcolor="red", highlightthickness=2, bg='black')
+        f.grid(row=row, column=col, rowspan=r_span, columnspan=c_span, sticky=W + E + N + S)
+        return f
+
+    def calculate_division(self, index):
+        locate = tuple()
+        locate_list = list()
+        mid_w = self.winfo_screenwidth() // 2
+        mid_h = self.winfo_screenheight() // 2
+        tri_w = self.winfo_screenwidth() // 3
+        tri_h = self.winfo_screenheight() // 3
+        full_row = self.winfo_screenwidth()
+        full_column = self.winfo_screenheight()
+        if index == 2:
+            locate1 = (0, 0, mid_w, full_column)
+            locate2 = (mid_w, 0, mid_w, full_column)
+            locate_list.append(locate1)
+            locate_list.append(locate2)
+        elif index == 3:
+            locate1 = (0, 0, mid_w, mid_h)
+            locate2 = (mid_w, 0, mid_w, mid_h)
+            locate3 = (0, mid_h, full_row, mid_h)
+            locate_list.append(locate1)
+            locate_list.append(locate2)
+            locate_list.append(locate3)
+        elif index == 4:
+            locate1 = (0, 0, mid_w, mid_h)
+            locate2 = (mid_w, 0, mid_w, mid_h)
+            locate3 = (0, mid_h, mid_w, mid_h)
+            locate4 = (mid_w, mid_h, mid_w, mid_h)
+            locate_list.append(locate1)
+            locate_list.append(locate2)
+            locate_list.append(locate3)
+            locate_list.append(locate4)
+        elif index == 5:
+            locate1 = (0, 0, mid_w, tri_h)
+            locate2 = (mid_w, 0, mid_w, tri_h)
+            locate3 = (0, tri_h, mid_w, tri_h)
+            locate4 = (mid_w, tri_h, mid_w, tri_h)
+            locate5 = (0, full_column-tri_h, full_row, tri_h)
+            locate_list.append(locate1)
+            locate_list.append(locate2)
+            locate_list.append(locate3)
+            locate_list.append(locate4)
+            locate_list.append(locate5)
+        elif index == 6:
+            locate1 = (0, 0, mid_w, tri_h)
+            locate2 = (mid_w, 0, mid_w, tri_h)
+            locate3 = (0, tri_h, mid_w, tri_h)
+            locate4 = (mid_w, tri_h, mid_w, tri_h)
+            locate5 = (0, full_column-tri_h, mid_w, tri_h)
+            locate6 = (full_column - tri_h, full_column - tri_h, mid_w, tri_h)
+            locate_list.append(locate1)
+            locate_list.append(locate2)
+            locate_list.append(locate3)
+            locate_list.append(locate4)
+            locate_list.append(locate5)
+            locate_list.append(locate6)
+
+        return locate_list
 
     def create_groups(self):
         group_amount = self.updated_amount()
         name_list = self.get_name_list()
+
+        location_list = self.calculate_division(group_amount)
         for index, group_name in zip(range(1, group_amount + 1), name_list):
+            tup = location_list[index-1]
+            frame = self.create_sub_frame(tup[0], tup[1], tup[2], tup[3])
             group_name = group_name + ": "
-            label = Label(self, text=group_name + self.time_string, font=LARGE_FONT,
-                          fg='white', bg='black', anchor='w')
-            code_label = Label(self, text="Insert 4 digit code: ", font=LARGE_FONT,
-                               fg='white', bg='black', anchor="w")
-            code_entry = Entry(self, show="*")
-            code_button = ttk.Button(self, text="Enter", command=self.check_code)
-            start_button = self.create_music_buttons()
+            label = Label(frame, text=group_name + self.time_string, font=LARGE_FONT,
+                          fg='white', bg='black')
+            code_label = Label(frame, text="Insert 4 digit code: ", font=LARGE_FONT,
+                               fg='white', bg='black')
+            code_entry = Entry(frame, show="*")
+            code_button = ttk.Button(frame, text="Enter", command=self.check_code)
+            start_button = self.create_music_buttons(frame)
             group = Group(index, label, group_name, code_label, code_entry, code_button,
                           self.get_penalty(), start_button)
             self.group_list.append(group)
 
         middle = self.winfo_screenwidth() // 2
-        self.start_button.grid(row=0, column=middle*2, padx=10, pady=10)
+        # self.start_button.pack(padx=10, pady=10)
+        self.start_button.grid(padx=10, pady=10)
         self.design_groups()
 
     def check_code(self):
