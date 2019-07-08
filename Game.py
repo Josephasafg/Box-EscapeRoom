@@ -74,11 +74,9 @@ class Game(Frame):
         return f
 
     def calculate_division(self, index):
-        locate = tuple()
         locate_list = list()
         mid_w = self.winfo_screenwidth() // 2
         mid_h = self.winfo_screenheight() // 2
-        tri_w = self.winfo_screenwidth() // 3
         tri_h = self.winfo_screenheight() // 3
         full_row = self.winfo_screenwidth()
         full_column = self.winfo_screenheight()
@@ -120,7 +118,7 @@ class Game(Frame):
             locate3 = (0, tri_h, mid_w, tri_h)
             locate4 = (mid_w, tri_h, mid_w, tri_h)
             locate5 = (0, full_column-tri_h, mid_w, tri_h)
-            locate6 = (full_column - tri_h, full_column - tri_h, mid_w, tri_h)
+            locate6 = (mid_w, full_column - tri_h, mid_w, tri_h)
             locate_list.append(locate1)
             locate_list.append(locate2)
             locate_list.append(locate3)
