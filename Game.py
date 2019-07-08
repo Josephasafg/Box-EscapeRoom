@@ -83,7 +83,6 @@ class Game(Frame):
         middle = self.winfo_screenwidth() // 2
         self.start_button.grid(row=0, column=middle*2, padx=10, pady=10)
         self.design_groups()
-        # self.pause_button.place(relx=0.4, rely=0.5, anchor=CENTER)
 
     def check_code(self):
         for group in self.group_list:
@@ -111,7 +110,6 @@ class Game(Frame):
         else:
             self.pause = False
             self.stop_game()
-
 
     def game(self):
         if not self.stop_flag:
