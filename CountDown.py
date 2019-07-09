@@ -15,8 +15,6 @@ class CountDown(Tk):
         self.container = Frame(self, width=width, height=height)
         self.container.grid_propagate(False)
         self.container.pack(side=TOP, fill=BOTH, expand=True)
-
-
         self.container.grid_rowconfigure(0, weight=1)
         self.container.grid_columnconfigure(0, weight=1)
 
