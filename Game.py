@@ -5,6 +5,7 @@ from typing import Tuple
 from tkinter import *
 from tkinter import ttk
 from Group import Group
+from itertools import cycle
 
 LARGE_FONT = ("verdana", 20)
 
@@ -13,6 +14,7 @@ class Game(Frame):
     amount_of_groups = 1
     penalty = 300
     group_name_list = list()
+    playlist = list()
 
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
@@ -22,15 +24,30 @@ class Game(Frame):
             self.grid_columnconfigure(c, weight=1)
         self._count = 3600
         self.configure(background='black')
-        self.time_string = time.strftime("60:00:00")
+        self._time_string = time.strftime("60:00:00")
+        pygame.mixer.init()
         # self.group_name = "Group "
         self.stop_flag = False
         self.pause = False
         self.load_music()
+        self.add_to_playlist()
+        self.playlist = cycle(self.playlist)
         self._group_list = list()
         self.start_button = ttk.Button(self, text="Start/Pause Game",
                                        command=self.begin_game)
         self.create_groups()
+
+    def add_to_playlist(self):
+        for song in self.playlist:
+            pygame.mixer.music.queue(song)
+
+    @property
+    def time_string(self):
+        return self._time_string
+
+    @time_string.setter
+    def time_string(self, value):
+        self._time_string = value
 
     @property
     def group_list(self):
@@ -49,9 +66,8 @@ class Game(Frame):
         self._count = value
 
     @staticmethod
-    def load_music():
-        pygame.mixer.init()
-        pygame.mixer.music.load("Music/DY.ogg")
+    def load_music(song="Music/The Shortest Song_ An amazingly beautiful song by Bryant Oden.ogg"):
+        pygame.mixer.music.load(song)
 
     @classmethod
     def set_name_list(cls, value):
@@ -182,13 +198,13 @@ class Game(Frame):
                                                 message=f"{group.name} Won!\nTime: {group.time_string}")
 
     def stop_game(self):
-        pygame.mixer.music.stop()
+        pygame.mixer.music.pause()
         self.stop_flag = True
 
     @staticmethod
     def play_music():
         pygame.mixer.music.set_volume(0.5)
-        pygame.mixer.music.play(-1)
+        pygame.mixer.music.play()
 
     def begin_game(self):
         if not self.pause:
@@ -202,6 +218,11 @@ class Game(Frame):
 
     def game(self):
         if not self.stop_flag:
+            if not pygame.mixer.music.get_busy():
+                next_song = next(self.playlist)
+                self.load_music(next_song)
+                self.play_music()
+                # self.playlist.pop(next_song)
             for group in self.group_list:
                 group.timer()
             self.after(1000, self.game)
