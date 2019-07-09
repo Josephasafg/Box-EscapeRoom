@@ -20,18 +20,38 @@ class Game(Frame):
             self.grid_rowconfigure(r, weight=1)
         for c in range(self.winfo_screenheight()):
             self.grid_columnconfigure(c, weight=1)
-        self.count = 3600
+        self._count = 3600
         self.configure(background='black')
         self.time_string = time.strftime("60:00:00")
-        self.group_name = "Group "
+        # self.group_name = "Group "
         self.stop_flag = False
         self.pause = False
-        pygame.mixer.init()
-        pygame.mixer.music.load("Music/DY.ogg")
-        self.group_list = list()
+        self.load_music()
+        self._group_list = list()
         self.start_button = ttk.Button(self, text="Start/Pause Game",
                                        command=self.begin_game)
         self.create_groups()
+
+    @property
+    def group_list(self):
+        return self._group_list
+
+    @group_list.setter
+    def group_list(self, value):
+        self._group_list = value
+
+    @property
+    def count(self):
+        return self._count
+
+    @count.setter
+    def count(self, value):
+        self._count = value
+
+    @staticmethod
+    def load_music():
+        pygame.mixer.init()
+        pygame.mixer.music.load("Music/DY.ogg")
 
     @classmethod
     def set_name_list(cls, value):
