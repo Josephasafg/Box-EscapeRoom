@@ -15,15 +15,15 @@ class DropDown(Frame):
         self.controller = controller
         self.configure(background='black')
         box_name = Label(self, text="Choose amount of penalty in minutes:", font=LARGE_FONT, fg='white', bg='black')
-        box_name.pack(fill=X)
+        box_name.pack(fill=X, padx=10, pady=10)
         self.current_table = StringVar()
         comboExample = ttk.Combobox(self, textvariable=self.current_table, state="readonly",
                                     values=OPTIONS)
-        comboExample.pack()
+        comboExample.pack(padx=10, pady=10)
         comboExample.current(0)
         next_button = ttk.Button(self, text="Next",
                                  command=lambda: self.go_to_next_page(self.current_table.get()))
-        next_button.pack()
+        next_button.pack(padx=10, pady=10)
     #     TODO: place button on bottom right
 
     def parse_value(self, combo_value: str) -> int:
