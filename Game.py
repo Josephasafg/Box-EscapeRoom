@@ -67,7 +67,10 @@ class Game(Frame):
 
     @staticmethod
     def load_music(song="Music/The Shortest Song_ An amazingly beautiful song by Bryant Oden.ogg"):
-        pygame.mixer.music.load(song)
+        try:
+            pygame.mixer.music.load(song)
+        except FileNotFoundError:
+            print(f"Failed to find file {song}")
 
     @classmethod
     def set_name_list(cls, value):
@@ -100,11 +103,12 @@ class Game(Frame):
                 group.code_button.pack(padx=5, pady=5)
                 group.start_button.pack(side=TOP, padx=10, pady=10)
 
-    def create_music_buttons(self, frame) -> Button:
+    @staticmethod
+    def create_music_buttons(frame) -> Button:
         start_button = ttk.Button(frame, text="Play/Pause")
         return start_button
 
-    def create_sub_frame(self,row, col, r_span, c_span) -> Frame:
+    def create_sub_frame(self, row, col, r_span, c_span) -> Frame:
         f = Frame(self, highlightbackground='red', highlightcolor="red", highlightthickness=2, bg='black')
         f.grid(row=row, column=col, rowspan=r_span, columnspan=c_span, sticky=W + E + N + S)
         return f
@@ -161,6 +165,9 @@ class Game(Frame):
             locate_list.append(locate4)
             locate_list.append(locate5)
             locate_list.append(locate6)
+        else:
+            locate1 = (0, 0, full_row, full_column)
+            locate_list.append(locate1)
 
         return locate_list
 
@@ -197,8 +204,9 @@ class Game(Frame):
                     tkinter.messagebox.showinfo(title="Winner",
                                                 message=f"{group.name} Won!\nTime: {group.time_string}")
 
+    # TODO: make pause and re-pause?
     def stop_game(self):
-        pygame.mixer.music.pause()
+        pygame.mixer.music.stop()
         self.stop_flag = True
 
     @staticmethod
