@@ -15,7 +15,7 @@ LARGE_FONT = ("verdana", 20)
 
 class Game(Frame):
     amount_of_groups = 1
-    penalty = 300
+    penalty = 30
     group_name_list = list()
     playlist = list()
     photo_path = None
