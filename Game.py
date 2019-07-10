@@ -2,9 +2,13 @@ import pygame
 import time
 import tkinter.messagebox
 from typing import Tuple
+from random import randint
 from tkinter import *
 from tkinter import ttk
 from Group import Group
+from itertools import cycle
+from PIL import ImageTk, Image
+
 
 LARGE_FONT = ("verdana", 20)
 
@@ -13,6 +17,8 @@ class Game(Frame):
     amount_of_groups = 1
     penalty = 300
     group_name_list = list()
+    playlist = list()
+    photo_path = None
 
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
@@ -20,18 +26,55 @@ class Game(Frame):
             self.grid_rowconfigure(r, weight=1)
         for c in range(self.winfo_screenheight()):
             self.grid_columnconfigure(c, weight=1)
-        self.count = 3600
+        self._count = 3600
         self.configure(background='black')
-        self.time_string = time.strftime("60:00:00")
-        self.group_name = "Group "
+        self._time_string = time.strftime("60:00:00")
+        pygame.mixer.init()
+        # self.group_name = "Group "
         self.stop_flag = False
         self.pause = False
-        pygame.mixer.init()
-        pygame.mixer.music.load("Music/DY.ogg")
-        self.group_list = list()
+        self.load_music()
+        self.add_to_playlist()
+        self.playlist = cycle(self.playlist)
+        self._group_list = list()
         self.start_button = ttk.Button(self, text="Start/Pause Game",
                                        command=self.begin_game)
         self.create_groups()
+
+    def add_to_playlist(self):
+        for song in self.playlist:
+            pygame.mixer.music.queue(song)
+
+    @property
+    def time_string(self):
+        return self._time_string
+
+    @time_string.setter
+    def time_string(self, value):
+        self._time_string = value
+
+    @property
+    def group_list(self):
+        return self._group_list
+
+    @group_list.setter
+    def group_list(self, value):
+        self._group_list = value
+
+    @property
+    def count(self):
+        return self._count
+
+    @count.setter
+    def count(self, value):
+        self._count = value
+
+    @staticmethod
+    def load_music(song="Music/The Shortest Song_ An amazingly beautiful song by Bryant Oden.ogg"):
+        try:
+            pygame.mixer.music.load(song)
+        except FileNotFoundError:
+            print(f"Failed to find file {song}")
 
     @classmethod
     def set_name_list(cls, value):
@@ -63,15 +106,18 @@ class Game(Frame):
                 group.code_entry.pack(padx=5, pady=5)
                 group.code_button.pack(padx=5, pady=5)
                 group.start_button.pack(side=TOP, padx=10, pady=10)
+            if self.photo_path:
+                self.place_images(group)
 
-    def create_music_buttons(self, frame) -> Button:
+    @staticmethod
+    def create_music_buttons(frame) -> Button:
         start_button = ttk.Button(frame, text="Play/Pause")
         return start_button
 
-    def create_sub_frame(self,row, col, r_span, c_span) -> Frame:
-        f = Frame(self, highlightbackground='red', highlightcolor="red", highlightthickness=2, bg='black')
-        f.grid(row=row, column=col, rowspan=r_span, columnspan=c_span, sticky=W + E + N + S)
-        return f
+    def create_sub_frame(self, row, col, r_span, c_span) -> Frame:
+        frame = Frame(self, highlightbackground='red', highlightcolor="red", highlightthickness=2, bg='black')
+        frame.grid(row=row, column=col, rowspan=r_span, columnspan=c_span, sticky=W + E + N + S)
+        return frame
 
     def calculate_division(self, index):
         locate_list = list()
@@ -125,8 +171,32 @@ class Game(Frame):
             locate_list.append(locate4)
             locate_list.append(locate5)
             locate_list.append(locate6)
+        else:
+            locate1 = (0, 0, full_row, full_column)
+            locate_list.append(locate1)
 
         return locate_list
+
+    @staticmethod
+    def place_images(group):
+        for image in range(10):
+            rand_x = randint(0, group.width)
+            rand_y = randint(0, group.height)
+            group.image_list[image].place(x=rand_x, y=rand_y)
+
+    def load_images(self):
+        load = Image.open(self.photo_path)
+        render = ImageTk.PhotoImage(load)
+        return render
+
+    @staticmethod
+    def create_images(frame, rendered_image):
+        image_list = list()
+        for _ in range(10):
+            img = Label(frame, image=rendered_image)
+            img.image = rendered_image
+            image_list.append(img)
+        return image_list
 
     def create_groups(self):
         group_amount = self.updated_amount()
@@ -144,8 +214,13 @@ class Game(Frame):
             code_entry = Entry(frame, show="*")
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
+            if self.photo_path:
+                image = self.load_images()
+                image_list = self.create_images(frame, image)
+            else:
+                image_list = None
             group = Group(index, label, group_name, code_label, code_entry, code_button,
-                          self.get_penalty(), start_button)
+                          self.get_penalty(), start_button, image_list, tup[2], tup[3])
             self.group_list.append(group)
 
         middle = self.winfo_screenwidth() // 2
@@ -161,6 +236,7 @@ class Game(Frame):
                     tkinter.messagebox.showinfo(title="Winner",
                                                 message=f"{group.name} Won!\nTime: {group.time_string}")
 
+    # TODO: make pause and re-pause?
     def stop_game(self):
         pygame.mixer.music.stop()
         self.stop_flag = True
@@ -168,7 +244,7 @@ class Game(Frame):
     @staticmethod
     def play_music():
         pygame.mixer.music.set_volume(0.5)
-        pygame.mixer.music.play(-1)
+        pygame.mixer.music.play()
 
     def begin_game(self):
         if not self.pause:
@@ -182,6 +258,11 @@ class Game(Frame):
 
     def game(self):
         if not self.stop_flag:
+            if not pygame.mixer.music.get_busy():
+                next_song = next(self.playlist)
+                self.load_music(next_song)
+                self.play_music()
+                # self.playlist.pop(next_song)
             for group in self.group_list:
                 group.timer()
             self.after(1000, self.game)
