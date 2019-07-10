@@ -64,7 +64,8 @@ class Group:
             minute, seconds = divmod(seconds, 60)
             if minute == 0 and seconds == 0:
                 self.stop_flag = True
-            self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
+            else:
+                self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
             # if minute > 60:
             #     hour = -1
             #     self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, seconds, seconds)
@@ -75,8 +76,8 @@ class Group:
             #     hour = 0
             #     self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
 
-            self.count -= self.deduce
-            self.label.configure(text=self.name + self.time_string, fg="red")
+                self.count -= self.deduce
+                self.label.configure(text=self.name + self.time_string, fg="red")
             # self.after(1000, self.timer)
 
     def check_code(self, i_code):
@@ -85,6 +86,8 @@ class Group:
             is_true = True
         else:
             if self.count < 600:
+                self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
+                self.label.configure(text=self.name + self.time_string, fg="white")
                 self.count = 0
             else:
                 self.count -= self.penalty
