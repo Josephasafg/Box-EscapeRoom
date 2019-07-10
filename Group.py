@@ -10,7 +10,7 @@ from PIL import ImageTk, Image
 
 class Group:
     def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
-                 code_button: Button, penalty: int, start_button: Button, image__label):
+                 code_button: Button, penalty: int, start_button: Button, image_list, width, height):
         self.time_string = time.strftime("60:00:00")
         self.stop_flag = False
         self.number = number
@@ -26,7 +26,9 @@ class Group:
         self.code_entry.configure(textvariable=self.code_entered)
         self.code_button = code_button
         self.start_button = start_button
-        self.image = image__label
+        self.image_list = image_list
+        self.width= width
+        self.height = height
         self.configure_music_buttons()
 
     def configure_music_buttons(self):

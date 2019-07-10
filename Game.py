@@ -105,6 +105,7 @@ class Game(Frame):
                 group.code_entry.pack(padx=5, pady=5)
                 group.code_button.pack(padx=5, pady=5)
                 group.start_button.pack(side=TOP, padx=10, pady=10)
+            self.place_images(group)
 
     @staticmethod
     def create_music_buttons(frame) -> Button:
@@ -174,19 +175,26 @@ class Game(Frame):
 
         return locate_list
 
+    @staticmethod
+    def place_images(group):
+        for image in range(10):
+            rand_x = randint(0, group.width)
+            rand_y = randint(0, group.height)
+            group.image_list[image].place(x=rand_x, y=rand_y)
+
     def load_images(self):
         load = Image.open("Images/computer1.png")
         render = ImageTk.PhotoImage(load)
         return render
 
     @staticmethod
-    def place_image(frame, rendered_image):
-        for _ in range(30):
+    def create_images(frame, rendered_image):
+        image_list = list()
+        for _ in range(10):
             img = Label(frame, image=rendered_image)
             img.image = rendered_image
-            rand_x = randint(0, frame.winfo_screenwidth())
-            rand_y = randint(0, frame.winfo_screenheight())
-            img.place(x=rand_x, y=rand_y)
+            image_list.append(img)
+        return image_list
 
     def create_groups(self):
         group_amount = self.updated_amount()
@@ -205,9 +213,9 @@ class Game(Frame):
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
             image = self.load_images()
-            self.place_image(frame, image)
+            image_list = self.create_images(frame, image)
             group = Group(index, label, group_name, code_label, code_entry, code_button,
-                          self.get_penalty(), start_button, image)
+                          self.get_penalty(), start_button, image_list, tup[2], tup[3])
             self.group_list.append(group)
 
         middle = self.winfo_screenwidth() // 2
