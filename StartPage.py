@@ -20,10 +20,18 @@ class StartPage(Frame):
         self.clock_amount_entry = Entry(self)
         left_frame = Frame(self)
         left_frame.pack(side=LEFT, padx=30, pady=30)
+        right_frame = Frame(self)
+        right_frame.pack(side=RIGHT, padx=30, pady=30)
+        self.photo_button = ttk.Button(right_frame, text="Browse photos", command=self.add_photo)
+        self.photo_entry = Entry(right_frame)
         self.playlist_box = Listbox(left_frame)
         self.add_button = ttk.Button(left_frame, text="+ Add", command=self.browse_songs)
         self.delete_button = ttk.Button(left_frame, text="- Del", command=self.delete_song)
         self.show_main()
+
+    def add_photo(self):
+        filename = filedialog.askopenfilename()
+        self.photo_entry.insert(0, filename)
 
     @property
     def filename_path(self):
@@ -43,11 +51,8 @@ class StartPage(Frame):
         self.playlist_box.pack()
         self.add_button.pack(side=LEFT)
         self.delete_button.pack(side=LEFT)
-
-
-
-        # button = ttk.Button(self, text="Enter",
-        #                     command=lambda: controller.show_frame(Game))
+        self.photo_entry.pack()
+        self.photo_button.pack(side=LEFT)
         button.pack()
 
     def browse_songs(self):
@@ -67,7 +72,6 @@ class StartPage(Frame):
         self.playlist_box.delete(selected_song)
         self.playlist.pop(selected_song)
 
-
     def check_clock_amount(self, amount):
         int_amount = int(amount)
         if int_amount > 6 or int_amount < 1:
@@ -75,4 +79,5 @@ class StartPage(Frame):
             tkinter.messagebox.showwarning("Warning", "Input must be between 1-6")
         else:
             Game.amount_of_groups = int_amount
+            Game.photo_path = self.photo_entry.get()
             self.controller.show_frame(DropDown)

@@ -27,7 +27,7 @@ class Group:
         self.code_button = code_button
         self.start_button = start_button
         self.image_list = image_list
-        self.width= width
+        self.width = width
         self.height = height
         self.configure_music_buttons()
 

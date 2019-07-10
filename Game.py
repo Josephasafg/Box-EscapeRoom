@@ -18,6 +18,7 @@ class Game(Frame):
     penalty = 300
     group_name_list = list()
     playlist = list()
+    photo_path = None
 
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
@@ -183,7 +184,7 @@ class Game(Frame):
             group.image_list[image].place(x=rand_x, y=rand_y)
 
     def load_images(self):
-        load = Image.open("Images/computer1.png")
+        load = Image.open(Game.photo_path)
         render = ImageTk.PhotoImage(load)
         return render
 
