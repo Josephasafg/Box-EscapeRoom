@@ -10,12 +10,12 @@ from PIL import ImageTk, Image
 
 class Group:
     def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
-                 code_button: Button, penalty: int, start_button: Button, image_list, width, height):
-        self.time_string = time.strftime("60:00:00")
+                 code_button: Button, penalty: int, start_button: Button, image_list, width, height, clock):
+        self.time_string = time.strftime(clock.clock_to_str())
         self.stop_flag = False
         self.number = number
         self.label = label
-        self._count = 3600
+        self._count = clock.time_to_seconds()
         self.deduce = 1
         self.name = name
         self.penalty = penalty

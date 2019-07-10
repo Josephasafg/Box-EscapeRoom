@@ -2,6 +2,7 @@ import pygame
 import time
 import tkinter.messagebox
 from typing import Tuple
+from Clock import Clock
 from random import randint
 from tkinter import *
 from tkinter import ttk
@@ -19,6 +20,7 @@ class Game(Frame):
     group_name_list = list()
     playlist = list()
     photo_path = None
+    clock = Clock()
 
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
@@ -26,9 +28,9 @@ class Game(Frame):
             self.grid_rowconfigure(r, weight=1)
         for c in range(self.winfo_screenheight()):
             self.grid_columnconfigure(c, weight=1)
-        self._count = 3600
+        self._count = self.clock.time_to_seconds()
         self.configure(background='black')
-        self._time_string = time.strftime("60:00:00")
+        self._time_string = time.strftime(self.clock.clock_to_str())
         pygame.mixer.init()
         # self.group_name = "Group "
         self.stop_flag = False
@@ -39,6 +41,9 @@ class Game(Frame):
         self._group_list = list()
         self.start_button = ttk.Button(self, text="Start/Pause Game",
                                        command=self.begin_game)
+
+        self.next_song_button = ttk.Button(self, text="Next Song",
+                                           command=self.play_playlist)
         self.create_groups()
 
     def add_to_playlist(self):
@@ -70,7 +75,7 @@ class Game(Frame):
         self._count = value
 
     @staticmethod
-    def load_music(song="Music/The Shortest Song_ An amazingly beautiful song by Bryant Oden.ogg"):
+    def load_music(song="Music/DY.ogg"):
         try:
             pygame.mixer.music.load(song)
         except FileNotFoundError:
@@ -220,12 +225,14 @@ class Game(Frame):
             else:
                 image_list = None
             group = Group(index, label, group_name, code_label, code_entry, code_button,
-                          self.get_penalty(), start_button, image_list, tup[2], tup[3])
+                          self.get_penalty(), start_button, image_list, tup[2], tup[3], self.clock)
             self.group_list.append(group)
 
-        middle = self.winfo_screenwidth() // 2
         # self.start_button.pack(padx=10, pady=10)
         self.start_button.grid(padx=10, pady=10)
+        self.next_song_button.grid(row=self.start_button.grid_info()['row'],
+                                   column=self.start_button.grid_info()['column']+1,
+                                   padx=10, pady=10)
         self.design_groups()
 
     def check_code(self):
@@ -242,9 +249,20 @@ class Game(Frame):
         self.stop_flag = True
 
     @staticmethod
-    def play_music():
+    def play_music(loop_flag=True):
         pygame.mixer.music.set_volume(0.5)
-        pygame.mixer.music.play()
+        if loop_flag:
+            pygame.mixer.music.play(loops=-1)
+        else:
+            pygame.mixer.music.play()
+
+    def play_playlist(self):
+        try:
+            next_song = next(self.playlist)
+            self.load_music(next_song)
+            self.play_music(loop_flag=False)
+        except FileNotFoundError:
+            print(f"Failed to find file... Can't play song")
 
     def begin_game(self):
         if not self.pause:
@@ -259,10 +277,7 @@ class Game(Frame):
     def game(self):
         if not self.stop_flag:
             if not pygame.mixer.music.get_busy():
-                next_song = next(self.playlist)
-                self.load_music(next_song)
-                self.play_music()
-                # self.playlist.pop(next_song)
+                self.play_playlist()
             for group in self.group_list:
                 group.timer()
             self.after(1000, self.game)
