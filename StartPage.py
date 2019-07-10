@@ -3,7 +3,7 @@ import os
 from tkinter import *
 from tkinter import filedialog
 from tkinter import ttk
-from DropDown import DropDown
+from GroupNamingPage import GroupNamingPage
 from Clock import Clock
 from Game import Game
 
@@ -44,7 +44,7 @@ class StartPage(Frame):
         hour_box = ttk.Combobox(clock_frame, textvariable=self.hour_table, state='readonly',
                                 values=['0', '1', '2'])
         hour_box.pack(side=LEFT, padx=5, pady=5)
-        hour_box.current(0)
+        hour_box.current(1)
         minutes_label.pack(side=TOP, pady=5, padx=5)
         minute_box = ttk.Combobox(clock_frame, textvariable=self.minute_table, state='readonly',
                                   values=Clock.get_minute_list())
@@ -109,4 +109,5 @@ class StartPage(Frame):
             Game.clock.minute = self.clock.minute
             Game.amount_of_groups = int_amount
             Game.photo_path = self.photo_entry.get()
-            self.controller.show_frame(DropDown)
+            self.controller.add_class_to_tuple(GroupNamingPage)
+            self.controller.show_frame(GroupNamingPage)

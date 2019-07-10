@@ -225,7 +225,7 @@ class Game(Frame):
             else:
                 image_list = None
             group = Group(index, label, group_name, code_label, code_entry, code_button,
-                          self.get_penalty(), start_button, image_list, tup[2], tup[3], self.clock)
+                          start_button, image_list, tup[2], tup[3], self.clock)
             self.group_list.append(group)
 
         # self.start_button.pack(padx=10, pady=10)
