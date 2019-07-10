@@ -114,9 +114,9 @@ class Game(Frame):
         return start_button
 
     def create_sub_frame(self, row, col, r_span, c_span) -> Frame:
-        f = Frame(self, highlightbackground='red', highlightcolor="red", highlightthickness=2, bg='black')
-        f.grid(row=row, column=col, rowspan=r_span, columnspan=c_span, sticky=W + E + N + S)
-        return f
+        frame = Frame(self, highlightbackground='red', highlightcolor="red", highlightthickness=2, bg='black')
+        frame.grid(row=row, column=col, rowspan=r_span, columnspan=c_span, sticky=W + E + N + S)
+        return frame
 
     def calculate_division(self, index):
         locate_list = list()
