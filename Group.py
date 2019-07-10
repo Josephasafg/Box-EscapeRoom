@@ -1,14 +1,16 @@
 import time
+from random import randint
 from tkinter import Label
 from tkinter import Entry
 from tkinter import Button
 from tkinter import StringVar
 from tkinter import END
+from PIL import ImageTk, Image
 
 
 class Group:
     def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
-                 code_button: Button, penalty: int, start_button: Button):
+                 code_button: Button, penalty: int, start_button: Button, image__label):
         self.time_string = time.strftime("60:00:00")
         self.stop_flag = False
         self.number = number
@@ -24,6 +26,7 @@ class Group:
         self.code_entry.configure(textvariable=self.code_entered)
         self.code_button = code_button
         self.start_button = start_button
+        self.image = image__label
         self.configure_music_buttons()
 
     def configure_music_buttons(self):
@@ -35,6 +38,10 @@ class Group:
             self.stop_flag = False
         else:
             self.stop_flag = True
+
+    def place_images(self):
+        for _ in range(30):
+            img = Label(self,)
 
     @property
     def count(self):

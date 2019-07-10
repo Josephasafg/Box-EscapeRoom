@@ -2,10 +2,13 @@ import pygame
 import time
 import tkinter.messagebox
 from typing import Tuple
+from random import randint
 from tkinter import *
 from tkinter import ttk
 from Group import Group
 from itertools import cycle
+from PIL import ImageTk, Image
+
 
 LARGE_FONT = ("verdana", 20)
 
@@ -171,6 +174,20 @@ class Game(Frame):
 
         return locate_list
 
+    def load_images(self):
+        load = Image.open("Images/computer1.png")
+        render = ImageTk.PhotoImage(load)
+        return render
+
+    @staticmethod
+    def place_image(frame, rendered_image):
+        for _ in range(30):
+            img = Label(frame, image=rendered_image)
+            img.image = rendered_image
+            rand_x = randint(0, frame.winfo_screenwidth())
+            rand_y = randint(0, frame.winfo_screenheight())
+            img.place(x=rand_x, y=rand_y)
+
     def create_groups(self):
         group_amount = self.updated_amount()
         name_list = self.get_name_list()
@@ -187,8 +204,10 @@ class Game(Frame):
             code_entry = Entry(frame, show="*")
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
+            image = self.load_images()
+            self.place_image(frame, image)
             group = Group(index, label, group_name, code_label, code_entry, code_button,
-                          self.get_penalty(), start_button)
+                          self.get_penalty(), start_button, image)
             self.group_list.append(group)
 
         middle = self.winfo_screenwidth() // 2
