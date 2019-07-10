@@ -184,7 +184,7 @@ class Game(Frame):
             group.image_list[image].place(x=rand_x, y=rand_y)
 
     def load_images(self):
-        load = Image.open(Game.photo_path)
+        load = Image.open(self.photo_path)
         render = ImageTk.PhotoImage(load)
         return render
 
