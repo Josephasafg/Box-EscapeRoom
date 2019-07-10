@@ -106,7 +106,8 @@ class Game(Frame):
                 group.code_entry.pack(padx=5, pady=5)
                 group.code_button.pack(padx=5, pady=5)
                 group.start_button.pack(side=TOP, padx=10, pady=10)
-            self.place_images(group)
+            if self.photo_path:
+                self.place_images(group)
 
     @staticmethod
     def create_music_buttons(frame) -> Button:
@@ -213,8 +214,11 @@ class Game(Frame):
             code_entry = Entry(frame, show="*")
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
-            image = self.load_images()
-            image_list = self.create_images(frame, image)
+            if self.photo_path:
+                image = self.load_images()
+                image_list = self.create_images(frame, image)
+            else:
+                image_list = None
             group = Group(index, label, group_name, code_label, code_entry, code_button,
                           self.get_penalty(), start_button, image_list, tup[2], tup[3])
             self.group_list.append(group)

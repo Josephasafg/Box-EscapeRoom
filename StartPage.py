@@ -18,15 +18,15 @@ class StartPage(Frame):
         self._filename_path = None
         self.controller = controller
         self.clock_amount_entry = Entry(self)
-        left_frame = Frame(self)
-        left_frame.pack(side=LEFT, padx=30, pady=30)
+        self.left_frame = Frame(self)
+
         right_frame = Frame(self)
         right_frame.pack(side=RIGHT, padx=30, pady=30)
         self.photo_button = ttk.Button(right_frame, text="Browse photos", command=self.add_photo)
         self.photo_entry = Entry(right_frame)
-        self.playlist_box = Listbox(left_frame)
-        self.add_button = ttk.Button(left_frame, text="+ Add", command=self.browse_songs)
-        self.delete_button = ttk.Button(left_frame, text="- Del", command=self.delete_song)
+        self.playlist_box = Listbox(self.left_frame)
+        self.add_button = ttk.Button(self.left_frame, text="+ Add", command=self.browse_songs)
+        self.delete_button = ttk.Button(self.left_frame, text="- Del", command=self.delete_song)
         self.show_main()
 
     def add_photo(self):
@@ -48,6 +48,7 @@ class StartPage(Frame):
         self.clock_amount_entry.pack(pady=11, padx=11)
         button = ttk.Button(self, text="Enter",
                             command=lambda: self.check_clock_amount(self.clock_amount_entry.get()))
+        self.left_frame.pack(padx=30, pady=30)
         self.playlist_box.pack()
         self.add_button.pack(side=LEFT)
         self.delete_button.pack(side=LEFT)
