@@ -10,7 +10,7 @@ def add_photo(photo_entry):
 
 
 def place_images(group):
-    for image in range(10):
+    for image in range(30):
         rand_x = randint(0, group.width)
         rand_y = randint(0, group.height)
         group.image_list[image].place(x=rand_x, y=rand_y)
@@ -24,7 +24,7 @@ def load_images(photo_path):
 
 def create_images(frame, rendered_image):
     image_list = list()
-    for _ in range(10):
+    for _ in range(30):
         img = Label(frame, image=rendered_image)
         img.image = rendered_image
         image_list.append(img)

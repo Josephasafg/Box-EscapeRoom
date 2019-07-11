@@ -43,9 +43,9 @@ class Group:
         else:
             self.stop_flag = True
 
-    def place_images(self):
-        for _ in range(30):
-            img = Label(self,)
+    # def place_images(self):
+    #     for _ in range(30):
+    #         img = Label(self,)
 
     @property
     def count(self):

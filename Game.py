@@ -98,6 +98,8 @@ class Game(Frame):
 
     def design_groups(self):
         for index, group in enumerate(self.group_list):
+            if self.photo_path:
+                ImageUtilities.place_images(group)
             if index % 2 == 0:
                 group.label.pack(padx=10, pady=10)
                 # group.code_label.pack()
@@ -110,14 +112,11 @@ class Game(Frame):
                 group.code_entry.pack(padx=5, pady=5)
                 group.code_button.pack(padx=5, pady=5)
                 group.start_button.pack(side=TOP, padx=10, pady=10)
-            if self.photo_path:
-                ImageUtilities.place_images(group)
 
     @staticmethod
     def create_music_buttons(frame) -> Button:
         start_button = ttk.Button(frame, text="Play/Pause")
         return start_button
-
 
     def calculate_division(self, index):
         locate_list = list()
