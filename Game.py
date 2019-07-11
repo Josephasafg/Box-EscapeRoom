@@ -1,15 +1,13 @@
 import pygame
 import time
 import tkinter.messagebox
-from typing import Tuple
+import ImageUtilities
+import Utilities
 from Clock import Clock
-from random import randint
 from tkinter import *
 from tkinter import ttk
 from Group import Group
 from itertools import cycle
-from PIL import ImageTk, Image
-
 
 LARGE_FONT = ("verdana", 20)
 
@@ -28,6 +26,7 @@ class Game(Frame):
             self.grid_rowconfigure(r, weight=1)
         for c in range(self.winfo_screenheight()):
             self.grid_columnconfigure(c, weight=1)
+
         self._count = self.clock.time_to_seconds()
         self.configure(background='black')
         self._time_string = time.strftime(self.clock.clock_to_str())
@@ -112,17 +111,13 @@ class Game(Frame):
                 group.code_button.pack(padx=5, pady=5)
                 group.start_button.pack(side=TOP, padx=10, pady=10)
             if self.photo_path:
-                self.place_images(group)
+                ImageUtilities.place_images(group)
 
     @staticmethod
     def create_music_buttons(frame) -> Button:
         start_button = ttk.Button(frame, text="Play/Pause")
         return start_button
 
-    def create_sub_frame(self, row, col, r_span, c_span) -> Frame:
-        frame = Frame(self, highlightbackground='red', highlightcolor="red", highlightthickness=2, bg='black')
-        frame.grid(row=row, column=col, rowspan=r_span, columnspan=c_span, sticky=W + E + N + S)
-        return frame
 
     def calculate_division(self, index):
         locate_list = list()
@@ -182,27 +177,6 @@ class Game(Frame):
 
         return locate_list
 
-    @staticmethod
-    def place_images(group):
-        for image in range(10):
-            rand_x = randint(0, group.width)
-            rand_y = randint(0, group.height)
-            group.image_list[image].place(x=rand_x, y=rand_y)
-
-    def load_images(self):
-        load = Image.open(self.photo_path)
-        render = ImageTk.PhotoImage(load)
-        return render
-
-    @staticmethod
-    def create_images(frame, rendered_image):
-        image_list = list()
-        for _ in range(10):
-            img = Label(frame, image=rendered_image)
-            img.image = rendered_image
-            image_list.append(img)
-        return image_list
-
     def create_groups(self):
         group_amount = self.updated_amount()
         name_list = self.get_name_list()
@@ -210,7 +184,7 @@ class Game(Frame):
         location_list = self.calculate_division(group_amount)
         for index, group_name in zip(range(1, group_amount + 1), name_list):
             tup = location_list[index-1]
-            frame = self.create_sub_frame(tup[0], tup[1], tup[2], tup[3])
+            frame = Utilities.create_sub_frame(self, tup[0], tup[1], tup[2], tup[3])
             group_name = group_name + ": "
             label = Label(frame, text=group_name + self.time_string, font=LARGE_FONT,
                           fg='white', bg='black')
@@ -220,8 +194,8 @@ class Game(Frame):
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
             if self.photo_path:
-                image = self.load_images()
-                image_list = self.create_images(frame, image)
+                image = ImageUtilities.load_images(self.photo_path)
+                image_list = ImageUtilities.create_images(frame, image)
             else:
                 image_list = None
             group = Group(index, label, group_name, code_label, code_entry, code_button,

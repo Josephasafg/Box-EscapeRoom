@@ -9,6 +9,8 @@ from PIL import ImageTk, Image
 
 
 class Group:
+    solving_password = "1966"
+
     def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
                  code_button: Button, start_button: Button, image_list, width, height, clock):
         self.time_string = time.strftime(clock.clock_to_str())
@@ -62,27 +64,16 @@ class Group:
         if not self.stop_flag:
             hour, seconds = divmod(self.count, 3600)
             minute, seconds = divmod(seconds, 60)
-            if minute == 0 and seconds == 0:
+            if hour == 0 and minute == 0 and seconds == 0:
                 self.stop_flag = True
             else:
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
-            # if minute > 60:
-            #     hour = -1
-            #     self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, seconds, seconds)
-            # elif minute == 60:
-            #     hour = 60
-            #     self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, seconds, seconds)
-            # else:
-            #     hour = 0
-            #     self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
-
                 self.count -= self.deduce
                 self.label.configure(text=self.name + self.time_string, fg="red")
-            # self.after(1000, self.timer)
 
     def check_code(self, i_code):
         is_true = False
-        if i_code == "1966":
+        if i_code == self.solving_password:
             is_true = True
         else:
             if self.count < 600:
