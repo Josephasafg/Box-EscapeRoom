@@ -10,15 +10,15 @@ from PIL import ImageTk, Image
 
 class Group:
     def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
-                 code_button: Button, penalty: int, start_button: Button, image_list, width, height):
-        self.time_string = time.strftime("60:00:00")
+                 code_button: Button, start_button: Button, image_list, width, height, clock):
+        self.time_string = time.strftime(clock.clock_to_str())
         self.stop_flag = False
         self.number = number
         self.label = label
-        self._count = 3600
+        self._count = clock.time_to_seconds()
         self.deduce = 1
         self.name = name
-        self.penalty = penalty
+        self.penalty = 600
         self.code_label = code_label
         self.code_entered = StringVar()
         self.code_entered.trace('w', self.limit_characters)
@@ -60,16 +60,24 @@ class Group:
 
     def timer(self):
         if not self.stop_flag:
-            minute, seconds = divmod(self.count, 60)
-            if minute == 60:
-                hour = 60
-                self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, seconds, seconds)
+            hour, seconds = divmod(self.count, 3600)
+            minute, seconds = divmod(seconds, 60)
+            if minute == 0 and seconds == 0:
+                self.stop_flag = True
             else:
-                hour = 0
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
+            # if minute > 60:
+            #     hour = -1
+            #     self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, seconds, seconds)
+            # elif minute == 60:
+            #     hour = 60
+            #     self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, seconds, seconds)
+            # else:
+            #     hour = 0
+            #     self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
 
-            self.count -= self.deduce
-            self.label.configure(text=self.name + self.time_string, fg="red")
+                self.count -= self.deduce
+                self.label.configure(text=self.name + self.time_string, fg="red")
             # self.after(1000, self.timer)
 
     def check_code(self, i_code):
@@ -77,7 +85,12 @@ class Group:
         if i_code == "1966":
             is_true = True
         else:
-            self.count -= self.penalty
+            if self.count < 600:
+                self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
+                self.label.configure(text=self.name + self.time_string, fg="white")
+                self.count = 0
+            else:
+                self.count -= self.penalty
             self.code_entry.delete("0", END)
 
         return is_true
