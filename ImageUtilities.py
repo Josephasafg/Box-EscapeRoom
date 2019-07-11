@@ -1,6 +1,12 @@
 from random import randint
 from PIL import ImageTk, Image
 from tkinter import Label
+from tkinter import filedialog
+
+
+def add_photo(photo_entry):
+    filename = filedialog.askopenfilename()
+    photo_entry.insert(0, filename)
 
 
 def place_images(group):

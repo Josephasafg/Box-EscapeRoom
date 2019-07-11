@@ -9,6 +9,8 @@ from PIL import ImageTk, Image
 
 
 class Group:
+    solving_password = "1966"
+
     def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
                  code_button: Button, start_button: Button, image_list, width, height, clock):
         self.time_string = time.strftime(clock.clock_to_str())
@@ -71,7 +73,7 @@ class Group:
 
     def check_code(self, i_code):
         is_true = False
-        if i_code == "1966":
+        if i_code == self.solving_password:
             is_true = True
         else:
             if self.count < 600:
