@@ -62,23 +62,12 @@ class Group:
         if not self.stop_flag:
             hour, seconds = divmod(self.count, 3600)
             minute, seconds = divmod(seconds, 60)
-            if minute == 0 and seconds == 0:
+            if hour == 0 and minute == 0 and seconds == 0:
                 self.stop_flag = True
             else:
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
-            # if minute > 60:
-            #     hour = -1
-            #     self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, seconds, seconds)
-            # elif minute == 60:
-            #     hour = 60
-            #     self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, seconds, seconds)
-            # else:
-            #     hour = 0
-            #     self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
-
                 self.count -= self.deduce
                 self.label.configure(text=self.name + self.time_string, fg="red")
-            # self.after(1000, self.timer)
 
     def check_code(self, i_code):
         is_true = False

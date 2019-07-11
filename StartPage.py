@@ -14,6 +14,11 @@ MEDIUM_FONT = ("verdana", 10)
 class StartPage(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
+        for r in range(self.winfo_screenwidth()):
+            self.grid_rowconfigure(r, weight=1)
+        for c in range(self.winfo_screenheight()):
+            self.grid_columnconfigure(c, weight=1)
+            
         self.configure(background='black')
         self.playlist = list()
         self._filename_path = None
