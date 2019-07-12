@@ -109,17 +109,26 @@ class Game(Frame):
                     group.canvas.create_window(width_even, label_height * 3, anchor=CENTER, window=group.code_entry)
                     group.canvas.create_window(width_even, label_height * 5, anchor=CENTER, window=group.code_button)
                     group.canvas.create_window(width_even, label_height * 7, anchor=CENTER, window=group.start_button)
+                    group.canvas.create_window(width_even, label_height * 9, anchor=CENTER, window=group.clue_buttons[0])
+                    group.canvas.create_window(width_even, label_height * 11, anchor=CENTER, window=group.clue_buttons[1])
+                    group.canvas.create_window(width_even, label_height * 13, anchor=CENTER, window=group.clue_buttons[2])
                 else:
                     group.canvas.create_window(width_odd, label_height, anchor=CENTER, window=group.label)
                     group.canvas.create_window(width_odd, label_height * 3, anchor=CENTER, window=group.code_entry)
                     group.canvas.create_window(width_odd, label_height * 5, anchor=CENTER, window=group.code_button)
                     group.canvas.create_window(width_odd, label_height * 7, anchor=CENTER, window=group.start_button)
+                    group.canvas.create_window(width_odd, label_height * 9, anchor=CENTER, window=group.clue_buttons[0])
+                    group.canvas.create_window(width_odd, label_height * 11, anchor=CENTER, window=group.clue_buttons[1])
+                    group.canvas.create_window(width_odd, label_height * 13, anchor=CENTER, window=group.clue_buttons[2])
             else:
+                # group.label.pack(row=int(group.height / 2), column=10)
                 group.label.pack(padx=10, pady=10)
                 # group.code_label.pack()
                 group.code_entry.pack(padx=5, pady=5)
                 group.code_button.pack(padx=5, pady=5)
                 group.start_button.pack(side=TOP, padx=10, pady=10)
+                for button in group.clue_buttons:
+                    button.pack(padx=2, pady=2)
 
     @staticmethod
     def create_music_buttons(frame) -> Button:
@@ -206,12 +215,16 @@ class Game(Frame):
             code_entry = Entry(frame, show="*")
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
+
+            # clue_frame = Utilities.create_sub_frame(frame, tup[2], tup[3], 30, 10, 'yellow')
+            clue_buttons = Utilities.create_clue_button_list(frame)
+
             if self.photo_path:
                 canvas = ImageUtilities.load_images(canvas, self.photo_path)
             else:
                 canvas = None
             group = Group(index, label, group_name, code_label, code_entry, code_button,
-                          start_button, canvas, tup[2], tup[3], self.clock)
+                          start_button, canvas, tup[2], tup[3], self.clock, clue_buttons)
             self.group_list.append(group)
 
         # self.start_button.pack(padx=10, pady=10)
@@ -228,6 +241,9 @@ class Game(Frame):
                     self.stop_game()
                     tkinter.messagebox.showinfo(title="Winner",
                                                 message=f"{group.name} Won!\nTime: {group.time_string}")
+
+    def deduct_clue(self):
+        pass
 
     # TODO: make pause and re-pause?
     def stop_game(self):

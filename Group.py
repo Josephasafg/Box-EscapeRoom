@@ -12,7 +12,7 @@ class Group:
     solving_password = "1966"
 
     def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
-                 code_button: Button, start_button: Button, canvas, width, height, clock):
+                 code_button: Button, start_button: Button, canvas, width, height, clock, clue_buttons):
         self.time_string = time.strftime(clock.clock_to_str())
         self.stop_flag = False
         self.number = number
@@ -28,14 +28,27 @@ class Group:
         self.code_entry.configure(textvariable=self.code_entered)
         self.code_button = code_button
         self.start_button = start_button
+        self.clue_buttons = clue_buttons
         self.canvas = canvas
         self.width = width
         self.height = height
         self.configure_music_buttons()
+        self.configure_clue_buttons()
 
     def configure_music_buttons(self):
         self.start_button.configure(command=self.start_clock)
         # self.pause_button.configure(command=self.pause_clock)
+
+    def configure_clue_buttons(self):
+        self.clue_buttons[0].configure(command=lambda: self.deduct_clue(self.clue_buttons[0]))
+        self.clue_buttons[1].configure(command=lambda: self.deduct_clue(self.clue_buttons[1]))
+        self.clue_buttons[2].configure(command=lambda: self.deduct_clue(self.clue_buttons[2]))
+        # for button in self.clue_buttons:
+        #     button.configure(command=lambda: self.deduct_clue(button))
+
+    def deduct_clue(self, button):
+        button.configure(state='disabled')
+        self.count -= 300
 
     def start_clock(self):
         if self.stop_flag:
@@ -43,9 +56,9 @@ class Group:
         else:
             self.stop_flag = True
 
-    def place_images(self):
-        for _ in range(30):
-            img = Label(self,)
+    # def place_images(self):
+    #     for _ in range(30):
+    #         img = Label(self,)
 
     @property
     def count(self):
