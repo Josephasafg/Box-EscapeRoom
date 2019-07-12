@@ -221,10 +221,14 @@ class Game(Frame):
 
             if self.photo_path:
                 canvas = ImageUtilities.load_images(canvas, self.photo_path)
+                canvas_width = int(canvas['width'])
+                canvas_height = int(canvas['height'])
             else:
                 canvas = None
+                canvas_width = 0
+                canvas_height = 0
             group = Group(index, label, group_name, code_label, code_entry, code_button,
-                          start_button, canvas, tup[2], tup[3], self.clock, clue_buttons)
+                          start_button, canvas, canvas_width, canvas_height, self.clock, clue_buttons)
             self.group_list.append(group)
 
         # self.start_button.pack(padx=10, pady=10)

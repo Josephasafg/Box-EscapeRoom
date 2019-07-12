@@ -1,7 +1,7 @@
 from random import randint
 from PIL import ImageTk, Image
 from tkinter import Label, Canvas
-from tkinter import filedialog, X, Y, BOTH
+from tkinter import filedialog, X, Y, BOTH, N, W, S, E, CENTER, NE
 from ImagePoint import ImagePoint
 
 
@@ -12,12 +12,13 @@ def add_photo(photo_entry):
 
 
 def place_images(group):
-    for image in range(30):
+    if group.width < 1000:
+        group.width *= 2
+    for image in range(90):
         rand_x = randint(0, group.width)
         rand_y = randint(0, group.height)
-        image_id = group.canvas.create_image(rand_x, rand_y, image=group.canvas.image)
+        image_id = group.canvas.create_image(rand_x, rand_y, image=group.canvas.image, anchor=CENTER)
         group.images_coordinate.append(image_id)
-        # group.image_list[image].create_image(rand_x, rand_y, image=group.image_list[image].image)
     group.canvas.pack(expand=True, fill=BOTH)
         # group.image_list[image].place(x=rand_x, y=rand_y)
 
