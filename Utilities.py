@@ -6,7 +6,7 @@ from tkinter import W, E, N, S
 def create_clue_button_list(frame: Frame) -> List[Button]:
     button_list = list()
     for button in range(1, 4):
-        current_button = Button(frame, text=f"Clue #{button}")
+        current_button = Button(frame, text=f"Clue #{button}", padx=3, pady=3)
         button_list.append(current_button)
     return button_list
 

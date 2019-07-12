@@ -109,11 +109,17 @@ class Game(Frame):
                     group.canvas.create_window(width_even, label_height * 3, anchor=CENTER, window=group.code_entry)
                     group.canvas.create_window(width_even, label_height * 5, anchor=CENTER, window=group.code_button)
                     group.canvas.create_window(width_even, label_height * 7, anchor=CENTER, window=group.start_button)
+                    group.canvas.create_window(width_even, label_height * 9, anchor=CENTER, window=group.clue_buttons[0])
+                    group.canvas.create_window(width_even, label_height * 11, anchor=CENTER, window=group.clue_buttons[1])
+                    group.canvas.create_window(width_even, label_height * 13, anchor=CENTER, window=group.clue_buttons[2])
                 else:
                     group.canvas.create_window(width_odd, label_height, anchor=CENTER, window=group.label)
                     group.canvas.create_window(width_odd, label_height * 3, anchor=CENTER, window=group.code_entry)
                     group.canvas.create_window(width_odd, label_height * 5, anchor=CENTER, window=group.code_button)
                     group.canvas.create_window(width_odd, label_height * 7, anchor=CENTER, window=group.start_button)
+                    group.canvas.create_window(width_odd, label_height * 9, anchor=CENTER, window=group.clue_buttons[0])
+                    group.canvas.create_window(width_odd, label_height * 11, anchor=CENTER, window=group.clue_buttons[1])
+                    group.canvas.create_window(width_odd, label_height * 13, anchor=CENTER, window=group.clue_buttons[2])
             else:
                 # group.label.pack(row=int(group.height / 2), column=10)
                 group.label.pack(padx=10, pady=10)
