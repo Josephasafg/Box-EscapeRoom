@@ -97,21 +97,32 @@ class Game(Frame):
         return cls.amount_of_groups
 
     def design_groups(self):
+        amount_of_group = len(self.group_list)
+        width = self.winfo_screenwidth()
         for index, group in enumerate(self.group_list):
-            if index % 2 == 0:
+            if self.photo_path:
+                ImageUtilities.place_images(group)
+                if amount_of_group % 2 == 0:
+                    group.canvas.create_window(width/amount_of_group, 20, anchor=CENTER, window=group.label)
+                    # group.label.pack(padx=10, pady=10)
+                    # # group.code_label.pack()
+                    # group.code_entry.pack(padx=5, pady=5)
+                    # group.code_button.pack(padx=5, pady=5)
+                    # group.start_button.pack(side=TOP, padx=10, pady=10)
+                else:
+                    group.canvas.create_window(width/(amount_of_group +1 ), 20, anchor=CENTER, window=group.label)
+                    # group.label.pack(padx=10, pady=30)
+                    # # group.code_label.pack()
+                    # group.code_entry.pack(padx=5, pady=5)
+                    # group.code_button.pack(padx=5, pady=5)
+                    # group.start_button.pack(side=TOP, padx=10, pady=10)
+            else:
                 group.label.pack(padx=10, pady=10)
                 # group.code_label.pack()
                 group.code_entry.pack(padx=5, pady=5)
                 group.code_button.pack(padx=5, pady=5)
                 group.start_button.pack(side=TOP, padx=10, pady=10)
-            else:
-                group.label.pack(padx=10, pady=30)
-                # group.code_label.pack()
-                group.code_entry.pack(padx=5, pady=5)
-                group.code_button.pack(padx=5, pady=5)
-                group.start_button.pack(side=TOP, padx=10, pady=10)
-            if self.photo_path:
-                ImageUtilities.place_images(group)
+
 
     @staticmethod
     def create_music_buttons(frame) -> Button:
@@ -184,7 +195,11 @@ class Game(Frame):
         for index, group_name in zip(range(1, group_amount + 1), name_list):
             tup = location_list[index-1]
             frame = Utilities.create_sub_frame(self, tup[0], tup[1], tup[2], tup[3])
-            canvas = Utilities.create_sub_canvas(frame, tup[2], tup[3], 'blue')
+            if index+1 == 3:
+                t = tup[2] * 2
+                canvas = Utilities.create_sub_canvas(frame, t, tup[3], 'blue')
+            else:
+                canvas = Utilities.create_sub_canvas(frame, tup[2], tup[3], 'blue')
             group_name = group_name + ": "
             label = Label(frame, text=group_name + self.time_string, font=LARGE_FONT,
                           fg='white', bg='black')
@@ -195,7 +210,6 @@ class Game(Frame):
             start_button = self.create_music_buttons(frame)
             if self.photo_path:
                 canvas = ImageUtilities.load_images(canvas, self.photo_path)
-                # image_list = ImageUtilities.create_images(canvas)
             else:
                 canvas = None
             group = Group(index, label, group_name, code_label, code_entry, code_button,

@@ -11,7 +11,7 @@ def add_photo(photo_entry):
 
 
 def place_images(group):
-    for image in range(10):
+    for image in range(30):
         rand_x = randint(0, group.width)
         rand_y = randint(0, group.height)
         group.canvas.create_image(rand_x, rand_y, image=group.canvas.image)
