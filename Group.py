@@ -14,6 +14,7 @@ class Group:
     def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
                  code_button: Button, start_button: Button, canvas, width, height, clock, clue_buttons):
         self.time_string = time.strftime(clock.clock_to_str())
+        self.images_coordinate = list()
         self.stop_flag = False
         self.number = number
         self.label = label
@@ -34,6 +35,7 @@ class Group:
         self.height = height
         self.configure_music_buttons()
         self.configure_clue_buttons()
+        self.second_counter = 0
 
     def configure_music_buttons(self):
         self.start_button.configure(command=self.start_clock)
@@ -55,10 +57,6 @@ class Group:
             self.stop_flag = False
         else:
             self.stop_flag = True
-
-    # def place_images(self):
-    #     for _ in range(30):
-    #         img = Label(self,)
 
     @property
     def count(self):
@@ -83,6 +81,12 @@ class Group:
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
                 self.count -= self.deduce
                 self.label.configure(text=self.name + self.time_string, fg="red")
+            self.second_counter += 1
+
+            if self.second_counter == 120:
+                if self.images_coordinate:
+                    self.canvas.delete(self.images_coordinate.pop(0))
+                self.second_counter = 0
 
     def check_code(self, i_code):
         is_true = False
