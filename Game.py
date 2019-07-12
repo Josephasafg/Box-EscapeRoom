@@ -118,7 +118,6 @@ class Game(Frame):
         start_button = ttk.Button(frame, text="Play/Pause")
         return start_button
 
-
     def calculate_division(self, index):
         locate_list = list()
         mid_w = self.winfo_screenwidth() // 2
@@ -185,6 +184,7 @@ class Game(Frame):
         for index, group_name in zip(range(1, group_amount + 1), name_list):
             tup = location_list[index-1]
             frame = Utilities.create_sub_frame(self, tup[0], tup[1], tup[2], tup[3])
+            canvas = Utilities.create_sub_canvas(frame, tup[2], tup[3], 'blue')
             group_name = group_name + ": "
             label = Label(frame, text=group_name + self.time_string, font=LARGE_FONT,
                           fg='white', bg='black')
@@ -194,12 +194,12 @@ class Game(Frame):
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
             if self.photo_path:
-                image = ImageUtilities.load_images(self.photo_path)
-                image_list = ImageUtilities.create_images(frame, image)
+                canvas = ImageUtilities.load_images(canvas, self.photo_path)
+                # image_list = ImageUtilities.create_images(canvas)
             else:
-                image_list = None
+                canvas = None
             group = Group(index, label, group_name, code_label, code_entry, code_button,
-                          start_button, image_list, tup[2], tup[3], self.clock)
+                          start_button, canvas, tup[2], tup[3], self.clock)
             self.group_list.append(group)
 
         # self.start_button.pack(padx=10, pady=10)
