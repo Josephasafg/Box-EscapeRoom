@@ -12,7 +12,7 @@ class Group:
     solving_password = "1966"
 
     def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
-                 code_button: Button, start_button: Button, image_list, width, height, clock):
+                 code_button: Button, start_button: Button, canvas, width, height, clock):
         self.time_string = time.strftime(clock.clock_to_str())
         self.stop_flag = False
         self.number = number
@@ -28,7 +28,7 @@ class Group:
         self.code_entry.configure(textvariable=self.code_entered)
         self.code_button = code_button
         self.start_button = start_button
-        self.image_list = image_list
+        self.canvas = canvas
         self.width = width
         self.height = height
         self.configure_music_buttons()

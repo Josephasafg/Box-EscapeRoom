@@ -1,7 +1,8 @@
 from random import randint
 from PIL import ImageTk, Image
-from tkinter import Label
-from tkinter import filedialog
+from tkinter import Label, Canvas
+from tkinter import filedialog, X, Y, BOTH
+
 
 
 def add_photo(photo_entry):
@@ -10,22 +11,26 @@ def add_photo(photo_entry):
 
 
 def place_images(group):
-    for image in range(10):
+    for image in range(30):
         rand_x = randint(0, group.width)
         rand_y = randint(0, group.height)
-        group.image_list[image].place(x=rand_x, y=rand_y)
+        group.canvas.create_image(rand_x, rand_y, image=group.canvas.image)
+        # group.image_list[image].create_image(rand_x, rand_y, image=group.image_list[image].image)
+    group.canvas.pack(expand=True, fill=BOTH)
+        # group.image_list[image].place(x=rand_x, y=rand_y)
 
 
-def load_images(photo_path):
+def load_images(canvas: Canvas, photo_path):
     load = Image.open(photo_path)
-    render = ImageTk.PhotoImage(load)
-    return render
+    canvas.image = ImageTk.PhotoImage(load)
+    return canvas
 
 
-def create_images(frame, rendered_image):
+def create_images(canvas):
     image_list = list()
     for _ in range(10):
-        img = Label(frame, image=rendered_image)
-        img.image = rendered_image
-        image_list.append(img)
+        # canvas.create_image()
+        # img = Label(frame, image=rendered_image)
+        # img.image = rendered_image
+        image_list.append(canvas)
     return image_list

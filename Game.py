@@ -97,27 +97,34 @@ class Game(Frame):
         return cls.amount_of_groups
 
     def design_groups(self):
+        amount_of_group = len(self.group_list)
+        width_even = self.winfo_screenwidth() / amount_of_group
+        width_odd = self.winfo_screenwidth() / (amount_of_group + 1)
+        label_height = 20
         for index, group in enumerate(self.group_list):
-            if index % 2 == 0:
+            if self.photo_path:
+                ImageUtilities.place_images(group)
+                if amount_of_group % 2 == 0:
+                    group.canvas.create_window(width_even, label_height, anchor=CENTER, window=group.label)
+                    group.canvas.create_window(width_even, label_height * 3, anchor=CENTER, window=group.code_entry)
+                    group.canvas.create_window(width_even, label_height * 5, anchor=CENTER, window=group.code_button)
+                    group.canvas.create_window(width_even, label_height * 7, anchor=CENTER, window=group.start_button)
+                else:
+                    group.canvas.create_window(width_odd, label_height, anchor=CENTER, window=group.label)
+                    group.canvas.create_window(width_odd, label_height * 3, anchor=CENTER, window=group.code_entry)
+                    group.canvas.create_window(width_odd, label_height * 5, anchor=CENTER, window=group.code_button)
+                    group.canvas.create_window(width_odd, label_height * 7, anchor=CENTER, window=group.start_button)
+            else:
                 group.label.pack(padx=10, pady=10)
                 # group.code_label.pack()
                 group.code_entry.pack(padx=5, pady=5)
                 group.code_button.pack(padx=5, pady=5)
                 group.start_button.pack(side=TOP, padx=10, pady=10)
-            else:
-                group.label.pack(padx=10, pady=30)
-                # group.code_label.pack()
-                group.code_entry.pack(padx=5, pady=5)
-                group.code_button.pack(padx=5, pady=5)
-                group.start_button.pack(side=TOP, padx=10, pady=10)
-            if self.photo_path:
-                ImageUtilities.place_images(group)
 
     @staticmethod
     def create_music_buttons(frame) -> Button:
         start_button = ttk.Button(frame, text="Play/Pause")
         return start_button
-
 
     def calculate_division(self, index):
         locate_list = list()
@@ -185,6 +192,12 @@ class Game(Frame):
         for index, group_name in zip(range(1, group_amount + 1), name_list):
             tup = location_list[index-1]
             frame = Utilities.create_sub_frame(self, tup[0], tup[1], tup[2], tup[3])
+            if (index + 1) % 2 != 0:
+                canvas_row = tup[2] * 2
+                canvas = Utilities.create_sub_canvas(frame, canvas_row, tup[3], 'black')
+            else:
+                canvas = Utilities.create_sub_canvas(frame, tup[2], tup[3], 'black')
+
             group_name = group_name + ": "
             label = Label(frame, text=group_name + self.time_string, font=LARGE_FONT,
                           fg='white', bg='black')
@@ -194,12 +207,11 @@ class Game(Frame):
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
             if self.photo_path:
-                image = ImageUtilities.load_images(self.photo_path)
-                image_list = ImageUtilities.create_images(frame, image)
+                canvas = ImageUtilities.load_images(canvas, self.photo_path)
             else:
-                image_list = None
+                canvas = None
             group = Group(index, label, group_name, code_label, code_entry, code_button,
-                          start_button, image_list, tup[2], tup[3], self.clock)
+                          start_button, canvas, tup[2], tup[3], self.clock)
             self.group_list.append(group)
 
         # self.start_button.pack(padx=10, pady=10)
