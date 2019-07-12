@@ -2,8 +2,6 @@ from random import randint
 from PIL import ImageTk, Image
 from tkinter import Label, Canvas
 from tkinter import filedialog, X, Y, BOTH, N, W, S, E, CENTER, NE
-from ImagePoint import ImagePoint
-
 
 
 def add_photo(photo_entry):
