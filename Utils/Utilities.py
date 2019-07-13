@@ -1,12 +1,25 @@
+import sys
+import os
 from tkinter import Frame, Canvas, Button
 from typing import List
 from tkinter import W, E, N, S
 
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 def create_clue_button_list(frame: Frame) -> List[Button]:
     button_list = list()
     for button in range(1, 4):
-        current_button = Button(frame, text=f"Clue #{button}", padx=3, pady=3)
+        current_button = Button(frame, text=f"Clue #{button}", padx=3, pady=3, activebackground='red')
         button_list.append(current_button)
     return button_list
 

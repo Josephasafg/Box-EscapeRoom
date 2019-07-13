@@ -1,9 +1,7 @@
 from tkinter import *
-from tkinter import ttk
-from StartPage import StartPage
-from DropDown import DropDown
-from GroupNamingPage import GroupNamingPage
-from Game import Game
+from GUI.StartPage import StartPage
+from Utils.Utilities import resource_path
+
 LARGE_FONT = ("verdana", 14)
 
 
@@ -12,6 +10,11 @@ class CountDown(Tk):
         Tk.__init__(self, *args, **kwargs)
         width = self.winfo_screenwidth()
         height = self.winfo_screenheight()
+
+        position_right = int(self.winfo_screenwidth() / 2 - width / 2)
+        position_down = int(self.winfo_screenheight() / 2 - height / 2)
+        self.geometry(f"+{position_right}+{position_down}")
+        self.wm_iconbitmap(resource_path('Images/Max-logo.ico'))
         self.container = Frame(self, width=width, height=height)
         self.container.grid_propagate(False)
         self.container.pack(side=TOP, fill=BOTH, expand=True)
@@ -20,10 +23,9 @@ class CountDown(Tk):
 
         self.frames = dict()
 
-        for f in (StartPage, DropDown):
-            frame = f(self.container, self)
-            self.frames[f] = frame
-            frame.grid(row=0, column=0, sticky=NSEW)
+        frame = StartPage(self.container, self)
+        self.frames[StartPage] = frame
+        frame.grid(row=0, column=0, sticky=NSEW)
 
         self.show_frame(StartPage)
 

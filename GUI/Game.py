@@ -1,15 +1,16 @@
 import pygame
 import time
 import tkinter.messagebox
-import ImageUtilities
-import Utilities
-from Clock import Clock
+from Utils.Utilities import resource_path
+from Utils import ImageUtilities, Utilities
+from Objects.Clock import Clock
 from tkinter import *
 from tkinter import ttk
-from Group import Group
+from Objects.Group import Group
 from itertools import cycle
 
 LARGE_FONT = ("verdana", 20)
+CLOCK_FONT = ("8514oem", 24, 'bold')
 
 
 class Game(Frame):
@@ -31,9 +32,9 @@ class Game(Frame):
         self.configure(background='black')
         self._time_string = time.strftime(self.clock.clock_to_str())
         pygame.mixer.init()
-        # self.group_name = "Group "
         self.stop_flag = False
         self.pause = False
+        self.pause_count = 0
         self.load_music()
         self.add_to_playlist()
         self.playlist = cycle(self.playlist)
@@ -74,7 +75,7 @@ class Game(Frame):
         self._count = value
 
     @staticmethod
-    def load_music(song="Music/DY.ogg"):
+    def load_music(song=resource_path("Music/DY.ogg")):
         try:
             pygame.mixer.music.load(song)
         except FileNotFoundError:
@@ -103,32 +104,31 @@ class Game(Frame):
         label_height = 20
         for index, group in enumerate(self.group_list):
             if self.photo_path:
-                ImageUtilities.place_images(group)
+                ImageUtilities.place_images(group, int(group.count // 120))
                 if amount_of_group % 2 == 0:
                     group.canvas.create_window(width_even, label_height, anchor=CENTER, window=group.label)
                     group.canvas.create_window(width_even, label_height * 3, anchor=CENTER, window=group.code_entry)
                     group.canvas.create_window(width_even, label_height * 5, anchor=CENTER, window=group.code_button)
                     group.canvas.create_window(width_even, label_height * 7, anchor=CENTER, window=group.start_button)
-                    group.canvas.create_window(width_even, label_height * 9, anchor=CENTER, window=group.clue_buttons[0])
-                    group.canvas.create_window(width_even, label_height * 11, anchor=CENTER, window=group.clue_buttons[1])
-                    group.canvas.create_window(width_even, label_height * 13, anchor=CENTER, window=group.clue_buttons[2])
+                    group.canvas.create_window(0, label_height * 9, anchor=W, window=group.clue_buttons[0])
+                    group.canvas.create_window(0, label_height * 11, anchor=W, window=group.clue_buttons[1])
+                    group.canvas.create_window(0, label_height * 13, anchor=W, window=group.clue_buttons[2])
                 else:
                     group.canvas.create_window(width_odd, label_height, anchor=CENTER, window=group.label)
                     group.canvas.create_window(width_odd, label_height * 3, anchor=CENTER, window=group.code_entry)
                     group.canvas.create_window(width_odd, label_height * 5, anchor=CENTER, window=group.code_button)
                     group.canvas.create_window(width_odd, label_height * 7, anchor=CENTER, window=group.start_button)
-                    group.canvas.create_window(width_odd, label_height * 9, anchor=CENTER, window=group.clue_buttons[0])
-                    group.canvas.create_window(width_odd, label_height * 11, anchor=CENTER, window=group.clue_buttons[1])
-                    group.canvas.create_window(width_odd, label_height * 13, anchor=CENTER, window=group.clue_buttons[2])
+                    group.canvas.create_window(0, label_height * 9, anchor=W, window=group.clue_buttons[0])
+                    group.canvas.create_window(0, label_height * 11, anchor=W, window=group.clue_buttons[1])
+                    group.canvas.create_window(0, label_height * 13, anchor=W, window=group.clue_buttons[2])
             else:
-                # group.label.pack(row=int(group.height / 2), column=10)
                 group.label.pack(padx=10, pady=10)
                 # group.code_label.pack()
                 group.code_entry.pack(padx=5, pady=5)
                 group.code_button.pack(padx=5, pady=5)
                 group.start_button.pack(side=TOP, padx=10, pady=10)
                 for button in group.clue_buttons:
-                    button.pack(padx=2, pady=2)
+                    button.pack(side=LEFT, padx=2, pady=2)
 
     @staticmethod
     def create_music_buttons(frame) -> Button:
@@ -208,26 +208,28 @@ class Game(Frame):
                 canvas = Utilities.create_sub_canvas(frame, tup[2], tup[3], 'black')
 
             group_name = group_name + ": "
-            label = Label(frame, text=group_name + self.time_string, font=LARGE_FONT,
+            label = Label(frame, text=group_name + self.time_string, font=CLOCK_FONT,
                           fg='white', bg='black')
             code_label = Label(frame, text="Insert 4 digit code: ", font=LARGE_FONT,
                                fg='white', bg='black')
-            code_entry = Entry(frame, show="*")
+            code_entry = Entry(frame, show="*", width=15, font=LARGE_FONT)
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
 
-            # clue_frame = Utilities.create_sub_frame(frame, tup[2], tup[3], 30, 10, 'yellow')
             clue_buttons = Utilities.create_clue_button_list(frame)
 
             if self.photo_path:
                 canvas = ImageUtilities.load_images(canvas, self.photo_path)
+                canvas_width = int(canvas['width'])
+                canvas_height = int(canvas['height'])
             else:
                 canvas = None
+                canvas_width = 0
+                canvas_height = 0
             group = Group(index, label, group_name, code_label, code_entry, code_button,
-                          start_button, canvas, tup[2], tup[3], self.clock, clue_buttons)
+                          start_button, canvas, canvas_width, canvas_height, self.clock, clue_buttons)
             self.group_list.append(group)
 
-        # self.start_button.pack(padx=10, pady=10)
         self.start_button.grid(padx=10, pady=10)
         self.next_song_button.grid(row=self.start_button.grid_info()['row'],
                                    column=self.start_button.grid_info()['column']+1,
@@ -242,8 +244,10 @@ class Game(Frame):
                     tkinter.messagebox.showinfo(title="Winner",
                                                 message=f"{group.name} Won!\nTime: {group.time_string}")
 
-    def deduct_clue(self):
-        pass
+    def pause_music(self):
+        if not self.stop_flag:
+            pygame.mixer.music.pause()
+            self.stop_flag = True
 
     # TODO: make pause and re-pause?
     def stop_game(self):
@@ -269,12 +273,16 @@ class Game(Frame):
     def begin_game(self):
         if not self.pause:
             self.pause = True
-            self.play_music()
+            if self.pause_count > 0:
+                pygame.mixer.music.unpause()
+            else:
+                self.play_music()
             self.stop_flag = False
             self.game()
         else:
             self.pause = False
-            self.stop_game()
+            self.pause_count += 1
+            self.pause_music()
 
     def game(self):
         if not self.stop_flag:

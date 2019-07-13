@@ -1,4 +1,4 @@
-from CountDown import CountDown
+from GUI.CountDown import CountDown
 
 if __name__ == '__main__':
     app = CountDown()
