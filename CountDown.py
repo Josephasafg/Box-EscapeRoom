@@ -12,6 +12,11 @@ class CountDown(Tk):
         Tk.__init__(self, *args, **kwargs)
         width = self.winfo_screenwidth()
         height = self.winfo_screenheight()
+
+        position_right = int(self.winfo_screenwidth() / 2 - width / 2)
+        position_down = int(self.winfo_screenheight() / 2 - height / 2)
+        self.geometry(f"+{position_right}+{position_down}")
+        self.wm_iconbitmap('Images/Max-logo.ico')
         self.container = Frame(self, width=width, height=height)
         self.container.grid_propagate(False)
         self.container.pack(side=TOP, fill=BOTH, expand=True)

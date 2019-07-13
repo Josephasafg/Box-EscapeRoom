@@ -27,6 +27,7 @@ class StartPage(Frame):
         self.full_col = self.winfo_screenheight()
             
         self.configure(background='black')
+        self.winfo_toplevel().title("MAX - IT'S A TOUGH WORLD.")
         self.playlist = list()
         self._filename_path = None
         self.clock = Clock()
@@ -73,7 +74,7 @@ class StartPage(Frame):
     def create_duration_gui(self):
         x_label_frame = int(self.full_row // 6.0)
         y_label_frame = self.full_col // 2
-        outter_game_duration_label = create_sub_frame(self, x_label_frame, y_label_frame, 5, 5, 'grey')
+        outter_game_duration_label = create_sub_frame(self, x_label_frame, y_label_frame, 5, 5, 'black')
         # game_duration_label = Frame(outter_game_duration_label)
         # game_duration_label.pack(side=LEFT, padx=20, pady=20)
         game_duration_label = Label(outter_game_duration_label, text="Game Duration:", font=LARGE_FONT, fg='white', bg='black')
@@ -81,10 +82,10 @@ class StartPage(Frame):
 
         x_hour_frame = int(self.full_row // 5.9)
         y_hour_frame = self.full_col // 2
-        outter_hour_frame = create_sub_frame(self, x_hour_frame, y_hour_frame, 5, 5, 'grey')
+        outter_hour_frame = create_sub_frame(self, x_hour_frame, y_hour_frame, 5, 5, 'black')
         hour_frame = Frame(outter_hour_frame)
         hour_frame.pack(side=LEFT, padx=5, pady=5)
-        hour_label = Label(hour_frame, text="Hours", font=MEDIUM_FONT, fg='grey')
+        hour_label = Label(hour_frame, text="Hours", font=MEDIUM_FONT, fg='black')
         hour_label.pack(side=LEFT, pady=5, padx=5)
         hour_box = ttk.Combobox(hour_frame, textvariable=self.hour_table, state='readonly',
                                 values=['0', '1', '2'])
@@ -93,10 +94,10 @@ class StartPage(Frame):
 
         x_minute_frame = int(self.full_row // 5.77)
         y_minute_frame = self.full_col // 2
-        outer_minute_frame = create_sub_frame(self, x_minute_frame, y_minute_frame, 5, 5, 'grey')
+        outer_minute_frame = create_sub_frame(self, x_minute_frame, y_minute_frame, 5, 5, 'black')
         minute_frame = Frame(outer_minute_frame)
         minute_frame.pack(side=LEFT, padx=5, pady=5)
-        minutes_label = Label(minute_frame, text="Minutes", font=MEDIUM_FONT, fg='grey')
+        minutes_label = Label(minute_frame, text="Minutes", font=MEDIUM_FONT, fg='black')
         minutes_label.pack(side=LEFT, pady=5, padx=5)
         minute_box = ttk.Combobox(minute_frame, textvariable=self.minute_table, state='readonly',
                                   values=Clock.get_minute_list())
@@ -116,19 +117,19 @@ class StartPage(Frame):
         clock_amount_label.pack(padx=15, pady=15)
         amount_box.pack(padx=10, pady=10)
         amount_box.current(0)
-        # enter_button = ttk.Button(insert_amount_frame, text="Enter",
-        #                           command=lambda: self.check_clock_amount(self.clock_amount_entry.get()))
-        # enter_button.pack(padx=5, pady=5)
 
     def create_music_gui(self):
         x_label_frame = int(self.full_row // 2)
         y_label_frame = self.full_col // 4
 
-        music_frame = create_sub_frame(self, x_label_frame, y_label_frame, 10, 10, "grey")
+        music_frame = create_sub_frame(self, x_label_frame, y_label_frame, 10, 10, "black")
         self.playlist_frame = Frame(music_frame)
+        music_label = Label(self.playlist_frame, text="Add Music to playlist:", font=LARGE_FONT,
+                            fg='white', bg='black')
         self.playlist_box = Listbox(self.playlist_frame)
         self.add_button = ttk.Button(self.playlist_frame, text="+ Add", command=self.browse_songs)
         self.delete_button = ttk.Button(self.playlist_frame, text="- Del", command=self.delete_song)
+        music_label.pack(side=TOP)
         self.playlist_frame.pack(side=LEFT, padx=30, pady=30)
         self.playlist_box.pack()
         self.add_button.pack(side=LEFT)
@@ -137,7 +138,7 @@ class StartPage(Frame):
     def create_password_gui(self):
         x_frame = self.full_row // 6
         y_frame = int(self.full_col // 1.5)
-        self.password_frame = create_sub_frame(self, x_frame, y_frame, 10, 10, "grey")
+        self.password_frame = create_sub_frame(self, x_frame, y_frame, 10, 10, "black")
         password_label = Label(self.password_frame, text="Insert Password: ", font=LARGE_FONT,
                                fg='white', bg='black')
         self.password_entry = Entry(self.password_frame, textvariable=self.code_entered)
@@ -145,14 +146,10 @@ class StartPage(Frame):
         self.password_entry.pack()
 
     def button_gui(self):
-        x_label_frame = int(self.full_row // 2)
-        y_label_frame = self.full_col // 2
-
-        button_frame = create_sub_frame(self, x_label_frame, y_label_frame, 10, 10, "grey")
-        enter_button = Button(button_frame, text="Enter all parameters", font=('ariel', 12),
-                                  command=lambda: self.check_clock_amount(self.group_amount_entry.get()), activebackground='grey')
-        enter_button.configure(width=int(x_label_frame/20), height=int(y_label_frame/20))
-        enter_button.pack(padx=5, pady=5)
+        enter_button = Button(self, text="Enter all parameters", font=('ariel', 12),
+                              command=lambda: self.check_clock_amount(self.group_amount_entry.get()),
+                              activebackground='red')
+        enter_button.grid(column=int(self.full_col / 2), padx=10, pady=10, sticky=W)
 
     def show_main(self):
         self.create_group_amount_gui()
@@ -169,8 +166,9 @@ class StartPage(Frame):
 
     def browse_songs(self):
         self.filename_path = filedialog.askopenfilename()
-        self.add_song_to_playlist()
-        Game.playlist.append(self.filename_path)
+        if self.filename_path != '':
+            self.add_song_to_playlist()
+            Game.playlist.append(self.filename_path)
 
     def add_song_to_playlist(self):
         filename = os.path.basename(self.filename_path)
@@ -186,15 +184,11 @@ class StartPage(Frame):
 
     def check_clock_amount(self, amount):
         int_amount = int(amount)
-        if int_amount > 6 or int_amount < 1:
-            self.clock_amount_entry.delete("0", END)
-            tkinter.messagebox.showwarning("Warning", "Input must be between 1-6")
-        else:
-            self.clock.parse_clock(self.hour_table.get(), self.minute_table.get())
-            Game.clock.hour = self.clock.hour
-            Game.clock.minute = self.clock.minute
-            Game.amount_of_groups = int_amount
-            Game.photo_path = self.photo_entry.get()
-            Group.solving_password = self.password_entry.get()
-            self.controller.add_class_to_tuple(GroupNamingPage)
-            self.controller.show_frame(GroupNamingPage)
+        self.clock.parse_clock(self.hour_table.get(), self.minute_table.get())
+        Game.clock.hour = self.clock.hour
+        Game.clock.minute = self.clock.minute
+        Game.amount_of_groups = int_amount
+        Game.photo_path = self.photo_entry.get()
+        Group.solving_password = self.password_entry.get()
+        self.controller.add_class_to_tuple(GroupNamingPage)
+        self.controller.show_frame(GroupNamingPage)
