@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
-from Game import Game
-from GroupNamingPage import GroupNamingPage
+from GUI.Game import Game
+from GUI.GroupNamingPage import GroupNamingPage
 
 OPTIONS = ["5 minutes", "10 minutes", "15 minutes"]
 

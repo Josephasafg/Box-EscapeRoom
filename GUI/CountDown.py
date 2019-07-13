@@ -1,9 +1,7 @@
 from tkinter import *
-from tkinter import ttk
-from StartPage import StartPage
+from GUI.StartPage import StartPage
 from DropDown import DropDown
-from GroupNamingPage import GroupNamingPage
-from Game import Game
+
 LARGE_FONT = ("verdana", 14)
 
 

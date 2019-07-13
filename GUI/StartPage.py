@@ -1,17 +1,16 @@
-import tkinter.messagebox
 import os
-from ImageUtilities import add_photo
-from Utilities import create_sub_frame
+from Utils.ImageUtilities import add_photo
+from Utils.Utilities import create_sub_frame
 from tkinter import *
 from tkinter import filedialog
 from tkinter import ttk
-from GroupNamingPage import GroupNamingPage
-from Clock import Clock
-from Game import Game
-from Group import Group
+from GUI.GroupNamingPage import GroupNamingPage
+from Objects.Clock import Clock
+from GUI.Game import Game
+from Objects.Group import Group
 
-LARGE_FONT = ("verdana", 16)
-MEDIUM_FONT = ("verdana", 10)
+LARGE_FONT = ("Book Antiqua", 18)
+MEDIUM_FONT = ("verdana", 14)
 
 
 class StartPage(Frame):
@@ -113,7 +112,7 @@ class StartPage(Frame):
                                    fg='white', bg='black')
 
         amount_box = ttk.Combobox(insert_amount_frame, textvariable=self.group_amount_entry, state="readonly",
-                                  values=options)
+                                  font=MEDIUM_FONT, values=options)
         clock_amount_label.pack(padx=15, pady=15)
         amount_box.pack(padx=10, pady=10)
         amount_box.current(0)
@@ -138,15 +137,18 @@ class StartPage(Frame):
     def create_password_gui(self):
         x_frame = self.full_row // 6
         y_frame = int(self.full_col // 1.5)
+
+        # x_frame = int(self.full_row // 3.5)
+        # y_frame = self.full_col // 4
         self.password_frame = create_sub_frame(self, x_frame, y_frame, 10, 10, "black")
         password_label = Label(self.password_frame, text="Insert Password: ", font=LARGE_FONT,
                                fg='white', bg='black')
-        self.password_entry = Entry(self.password_frame, textvariable=self.code_entered)
+        self.password_entry = Entry(self.password_frame, textvariable=self.code_entered, font=MEDIUM_FONT)
         password_label.pack()
         self.password_entry.pack()
 
     def button_gui(self):
-        enter_button = Button(self, text="Enter all parameters", font=('ariel', 12),
+        enter_button = Button(self, text="Enter all parameters", font=('ariel', 14),
                               command=lambda: self.check_clock_amount(self.group_amount_entry.get()),
                               activebackground='red')
         enter_button.grid(column=int(self.full_col / 2), padx=10, pady=10, sticky=W)

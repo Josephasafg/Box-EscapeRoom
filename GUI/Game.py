@@ -1,12 +1,11 @@
 import pygame
 import time
 import tkinter.messagebox
-import ImageUtilities
-import Utilities
-from Clock import Clock
+from Utils import ImageUtilities, Utilities
+from Objects.Clock import Clock
 from tkinter import *
 from tkinter import ttk
-from Group import Group
+from Objects.Group import Group
 from itertools import cycle
 
 LARGE_FONT = ("verdana", 20)
@@ -34,6 +33,7 @@ class Game(Frame):
         pygame.mixer.init()
         self.stop_flag = False
         self.pause = False
+        self.pause_count = 0
         self.load_music()
         self.add_to_playlist()
         self.playlist = cycle(self.playlist)
@@ -103,7 +103,7 @@ class Game(Frame):
         label_height = 20
         for index, group in enumerate(self.group_list):
             if self.photo_path:
-                ImageUtilities.place_images(group, int(group.count//120))
+                ImageUtilities.place_images(group, int(group.count // 120))
                 if amount_of_group % 2 == 0:
                     group.canvas.create_window(width_even, label_height, anchor=CENTER, window=group.label)
                     group.canvas.create_window(width_even, label_height * 3, anchor=CENTER, window=group.code_entry)
@@ -211,7 +211,7 @@ class Game(Frame):
                           fg='white', bg='black')
             code_label = Label(frame, text="Insert 4 digit code: ", font=LARGE_FONT,
                                fg='white', bg='black')
-            code_entry = Entry(frame, show="*")
+            code_entry = Entry(frame, show="*", width=15, font=LARGE_FONT)
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
 
@@ -243,6 +243,11 @@ class Game(Frame):
                     tkinter.messagebox.showinfo(title="Winner",
                                                 message=f"{group.name} Won!\nTime: {group.time_string}")
 
+    def pause_music(self):
+        if not self.stop_flag:
+            pygame.mixer.music.pause()
+            self.stop_flag = True
+
     # TODO: make pause and re-pause?
     def stop_game(self):
         pygame.mixer.music.stop()
@@ -267,12 +272,16 @@ class Game(Frame):
     def begin_game(self):
         if not self.pause:
             self.pause = True
-            self.play_music()
+            if self.pause_count > 0:
+                pygame.mixer.music.unpause()
+            else:
+                self.play_music()
             self.stop_flag = False
             self.game()
         else:
             self.pause = False
-            self.stop_game()
+            self.pause_count += 1
+            self.pause_music()
 
     def game(self):
         if not self.stop_flag:
