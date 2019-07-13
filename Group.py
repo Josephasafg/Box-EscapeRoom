@@ -1,4 +1,5 @@
 import time
+import math
 from random import randint
 from tkinter import Label
 from tkinter import Entry
@@ -51,6 +52,8 @@ class Group:
     def deduct_clue(self, button):
         button.configure(state='disabled')
         self.count -= 300
+        amount_to_deduct = math.ceil(int(300/120))
+        self.remove_image(amount_to_deduct)
 
     def start_clock(self):
         if self.stop_flag:
@@ -71,6 +74,14 @@ class Group:
         if len(value) > 4:
             self.code_entered.set(value[:4])
 
+    def remove_image(self, remove_amount=1):
+        for _ in range(remove_amount):
+            if self.images_coordinate:
+                self.canvas.delete(self.images_coordinate.pop(0))
+
+        if self.second_counter == 120:
+            self.second_counter = 0
+
     def timer(self):
         if not self.stop_flag:
             hour, seconds = divmod(self.count, 3600)
@@ -84,9 +95,7 @@ class Group:
             self.second_counter += 1
 
             if self.second_counter == 120:
-                if self.images_coordinate:
-                    self.canvas.delete(self.images_coordinate.pop(0))
-                self.second_counter = 0
+                self.remove_image()
 
     def check_code(self, i_code):
         is_true = False
@@ -99,6 +108,8 @@ class Group:
                 self.count = 0
             else:
                 self.count -= self.penalty
+                image_to_remove = math.ceil(int(self.penalty/120))
+                self.remove_image(image_to_remove)
             self.code_entry.delete("0", END)
 
         return is_true
