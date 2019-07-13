@@ -36,7 +36,7 @@ class StartPage(Frame):
         self.playlist_frame = None
         self.playlist_box = None
         self.add_button = None
-        self.delete_button= None
+        self.delete_button = None
         self.photo_frame = None
         self.photo_button = None
         self.photo_entry = None
@@ -87,7 +87,7 @@ class StartPage(Frame):
         hour_label = Label(hour_frame, text="Hours", font=MEDIUM_FONT, fg='black')
         hour_label.pack(side=LEFT, pady=5, padx=5)
         hour_box = ttk.Combobox(hour_frame, textvariable=self.hour_table, state='readonly',
-                                values=['0', '1', '2'])
+                                values=['0', '1', '2'], font=MEDIUM_FONT)
         hour_box.pack(side=LEFT, padx=5, pady=5)
         hour_box.current(1)
 
@@ -99,7 +99,7 @@ class StartPage(Frame):
         minutes_label = Label(minute_frame, text="Minutes", font=MEDIUM_FONT, fg='black')
         minutes_label.pack(side=LEFT, pady=5, padx=5)
         minute_box = ttk.Combobox(minute_frame, textvariable=self.minute_table, state='readonly',
-                                  values=Clock.get_minute_list())
+                                  values=Clock.get_minute_list(), font=MEDIUM_FONT)
         minute_box.pack(padx=5, pady=5)
         minute_box.current(0)
 
