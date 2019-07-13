@@ -53,7 +53,12 @@ class Group:
         button.configure(state='disabled')
         amount_to_deduct = math.ceil(int(300 / 120))
         self.remove_image(amount_to_deduct)
-        self.count -= 300
+        if self.count < 300:
+            self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
+            self.label.configure(text=self.name + self.time_string, fg="white")
+            self.count = 0
+        else:
+            self.count -= 300
 
     def start_clock(self):
         if self.stop_flag:
