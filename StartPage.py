@@ -189,6 +189,7 @@ class StartPage(Frame):
         Game.clock.minute = self.clock.minute
         Game.amount_of_groups = int_amount
         Game.photo_path = self.photo_entry.get()
-        Group.solving_password = self.password_entry.get()
+        if self.password_entry.get() != '':
+            Group.solving_password = self.password_entry.get()
         self.controller.add_class_to_tuple(GroupNamingPage)
         self.controller.show_frame(GroupNamingPage)

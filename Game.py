@@ -32,7 +32,6 @@ class Game(Frame):
         self.configure(background='black')
         self._time_string = time.strftime(self.clock.clock_to_str())
         pygame.mixer.init()
-        # self.group_name = "Group "
         self.stop_flag = False
         self.pause = False
         self.load_music()
@@ -104,7 +103,7 @@ class Game(Frame):
         label_height = 20
         for index, group in enumerate(self.group_list):
             if self.photo_path:
-                ImageUtilities.place_images(group)
+                ImageUtilities.place_images(group, int(group.count//120))
                 if amount_of_group % 2 == 0:
                     group.canvas.create_window(width_even, label_height, anchor=CENTER, window=group.label)
                     group.canvas.create_window(width_even, label_height * 3, anchor=CENTER, window=group.code_entry)
@@ -216,7 +215,6 @@ class Game(Frame):
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
 
-            # clue_frame = Utilities.create_sub_frame(frame, tup[2], tup[3], 30, 10, 'yellow')
             clue_buttons = Utilities.create_clue_button_list(frame)
 
             if self.photo_path:
@@ -231,7 +229,6 @@ class Game(Frame):
                           start_button, canvas, canvas_width, canvas_height, self.clock, clue_buttons)
             self.group_list.append(group)
 
-        # self.start_button.pack(padx=10, pady=10)
         self.start_button.grid(padx=10, pady=10)
         self.next_song_button.grid(row=self.start_button.grid_info()['row'],
                                    column=self.start_button.grid_info()['column']+1,
@@ -245,9 +242,6 @@ class Game(Frame):
                     self.stop_game()
                     tkinter.messagebox.showinfo(title="Winner",
                                                 message=f"{group.name} Won!\nTime: {group.time_string}")
-
-    def deduct_clue(self):
-        pass
 
     # TODO: make pause and re-pause?
     def stop_game(self):

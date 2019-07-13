@@ -9,10 +9,10 @@ def add_photo(photo_entry):
     photo_entry.insert(0, filename)
 
 
-def place_images(group):
+def place_images(group, amount_of_images):
     if group.width < 1000:
         group.width *= 2
-    for image in range(90):
+    for image in range(amount_of_images):
         rand_x = randint(0, group.width)
         rand_y = randint(0, group.height)
         image_id = group.canvas.create_image(rand_x, rand_y, image=group.canvas.image, anchor=CENTER)

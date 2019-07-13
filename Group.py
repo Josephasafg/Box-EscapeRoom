@@ -51,9 +51,9 @@ class Group:
 
     def deduct_clue(self, button):
         button.configure(state='disabled')
-        self.count -= 300
-        amount_to_deduct = math.ceil(int(300/120))
+        amount_to_deduct = math.ceil(int(300 / 120))
         self.remove_image(amount_to_deduct)
+        self.count -= 300
 
     def start_clock(self):
         if self.stop_flag:
@@ -99,17 +99,19 @@ class Group:
 
     def check_code(self, i_code):
         is_true = False
-        if i_code == self.solving_password:
+        if i_code == str(self.solving_password):
             is_true = True
         else:
             if self.count < 600:
+                image_to_remove = math.ceil(int(self.penalty / 120))
+                self.remove_image(image_to_remove)
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
                 self.label.configure(text=self.name + self.time_string, fg="white")
                 self.count = 0
             else:
-                self.count -= self.penalty
-                image_to_remove = math.ceil(int(self.penalty/120))
+                image_to_remove = math.ceil(int(self.penalty / 120))
                 self.remove_image(image_to_remove)
+                self.count -= self.penalty
             self.code_entry.delete("0", END)
 
         return is_true
