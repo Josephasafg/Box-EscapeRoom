@@ -1,6 +1,7 @@
 import pygame
 import time
 import tkinter.messagebox
+from Utils.Utilities import resource_path
 from Utils import ImageUtilities, Utilities
 from Objects.Clock import Clock
 from tkinter import *
@@ -74,7 +75,7 @@ class Game(Frame):
         self._count = value
 
     @staticmethod
-    def load_music(song="Music/DY.ogg"):
+    def load_music(song=resource_path("Music/DY.ogg")):
         try:
             pygame.mixer.music.load(song)
         except FileNotFoundError:
