@@ -8,7 +8,7 @@ from tkinter import *
 from tkinter import ttk
 from Objects.Group import Group
 from itertools import cycle
-from EntryWithPlaceHolder import EntryWithPlaceholder
+from Objects.EntryWithPlaceHolder import EntryWithPlaceholder
 
 LARGE_FONT = ("verdana", 20)
 CLOCK_FONT = ("8514oem", 34, 'bold')

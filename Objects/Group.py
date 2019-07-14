@@ -1,13 +1,8 @@
 import time
 import math
-from random import randint
 from tkinter import Label
-from tkinter import Entry
 from tkinter import Button
-from tkinter import StringVar
 from tkinter import END
-from EntryWithPlaceHolder import EntryWithPlaceholder
-from PIL import ImageTk, Image
 
 
 class Group:
