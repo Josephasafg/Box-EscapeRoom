@@ -51,6 +51,7 @@ class Group:
         self.remove_image(amount_to_deduct)
         if self.count < 300:
             self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
+            Game.Game.win_count += 1
             self.label.configure(text=self.name, fg="white")
             self.time_label.configure(text=self.time_string, fg='white')
             self.count = 0
@@ -89,13 +90,12 @@ class Group:
             hour, seconds = divmod(self.count, 3600)
             minute, seconds = divmod(seconds, 60)
             if self.win_flag:
-                self.label.configure(text=self.name, fg="green")
-                self.time_label.configure(text=self.time_string, fg='green')
                 self.stop_flag = True
                 return
             if hour == 0 and minute == 0 and seconds == 0:
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
                 self.label.configure(text=self.name, fg="white")
+                Game.Game.win_count += 1
                 self.time_label.configure(text=self.time_string, fg='white')
                 self.stop_flag = True
             else:
@@ -111,9 +111,11 @@ class Group:
     def check_code(self, i_code):
         if i_code == str(self.solving_password):
             self.win_flag = True
-            Game.Game.win_count += 1
+            self.label.configure(text=self.name, fg="green")
+            self.time_label.configure(text=self.time_string, fg='green')
             self.code_entry.delete("0", END)
             self.code_entry.configure(show='', state='disabled')
+            Game.Game.win_count += 1
         else:
             if self.count < 600:
                 image_to_remove = math.ceil(int(self.penalty / 120))
