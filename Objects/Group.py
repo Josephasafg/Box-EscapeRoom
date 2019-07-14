@@ -3,6 +3,7 @@ import math
 from tkinter import Label
 from tkinter import Button
 from tkinter import END
+from GUI import Game
 
 
 class Group:
@@ -110,6 +111,9 @@ class Group:
     def check_code(self, i_code):
         if i_code == str(self.solving_password):
             self.win_flag = True
+            Game.Game.win_count += 1
+            self.code_entry.delete("0", END)
+            self.code_entry.configure(show='', state='disabled')
         else:
             if self.count < 600:
                 image_to_remove = math.ceil(int(self.penalty / 120))

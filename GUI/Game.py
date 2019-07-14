@@ -22,6 +22,7 @@ class Game(Frame):
     group_name_list = list()
     playlist = list()
     photo_path = None
+    win_count = 0
     clock = Clock()
 
     def __init__(self, parent, controller):
@@ -252,9 +253,10 @@ class Game(Frame):
         for group in self.group_list:
             if len(group.code_entry.get()) != 0:
                 if group.check_code(group.code_entry.get()):
-                    # self.stop_game()
                     tkinter.messagebox.showinfo(title="Winner",
                                                 message=f"{group.name} Won!\nTime: {group.time_string}")
+                    if self.win_count == len(self.group_list):
+                        self.stop_game()
 
     def pause_music(self):
         if not self.stop_flag:
