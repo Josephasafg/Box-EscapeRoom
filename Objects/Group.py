@@ -95,9 +95,9 @@ class Group:
             if hour == 0 and minute == 0 and seconds == 0:
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
                 self.label.configure(text=self.name, fg="white")
-                Game.Game.win_count += 1
                 self.time_label.configure(text=self.time_string, fg='white')
                 self.stop_flag = True
+                Game.Game.win_count += 1
             else:
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
                 self.count -= self.deduce
@@ -117,15 +117,15 @@ class Group:
             self.code_entry.configure(show='', state='disabled')
             Game.Game.win_count += 1
         else:
-            if self.count < 600:
+            if i_code == 'ENTER CODE' or i_code == '':
+                return self.win_flag
+            elif self.count < 600:
                 image_to_remove = math.ceil(int(self.penalty / 120))
                 self.remove_image(image_to_remove)
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
                 self.label.configure(text=self.name, fg="white")
                 self.time_label.configure(text=self.time_string, fg='white')
                 self.count = 0
-            elif i_code == 'ENTER CODE':
-                return self.win_flag
             else:
                 image_to_remove = math.ceil(int(self.penalty / 120))
                 self.remove_image(image_to_remove)
