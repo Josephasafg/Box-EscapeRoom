@@ -92,6 +92,8 @@ class Group:
             hour, seconds = divmod(self.count, 3600)
             minute, seconds = divmod(seconds, 60)
             if hour == 0 and minute == 0 and seconds == 0:
+                self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
+                self.label.configure(text=self.name + self.time_string, fg="white")
                 self.stop_flag = True
             else:
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
