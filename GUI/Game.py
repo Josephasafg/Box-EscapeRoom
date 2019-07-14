@@ -10,7 +10,7 @@ from Objects.Group import Group
 from itertools import cycle
 
 LARGE_FONT = ("verdana", 20)
-CLOCK_FONT = ("8514oem", 24, 'bold')
+CLOCK_FONT = ("8514oem", 34, 'bold')
 
 
 class Game(Frame):
@@ -123,6 +123,7 @@ class Game(Frame):
                     group.canvas.create_window(0, label_height * 13, anchor=W, window=group.clue_buttons[2])
             else:
                 group.label.pack(padx=10, pady=10)
+                group.time_label.pack(padx=10, pady=10)
                 # group.code_label.pack()
                 group.code_entry.pack(padx=5, pady=5)
                 group.code_button.pack(padx=5, pady=5)
@@ -208,8 +209,10 @@ class Game(Frame):
                 canvas = Utilities.create_sub_canvas(frame, tup[2], tup[3], 'black')
 
             group_name = group_name + ": "
-            label = Label(frame, text=group_name + self.time_string, font=CLOCK_FONT,
-                          fg='white', bg='black')
+            group_name_label = Label(frame, text=group_name, font=CLOCK_FONT,
+                                     fg='white', bg='black')
+            time_label = Label(frame, text=self.time_string, font=CLOCK_FONT,
+                               fg='white', bg='black')
             code_label = Label(frame, text="Insert 4 digit code: ", font=LARGE_FONT,
                                fg='white', bg='black')
             code_entry = Entry(frame, show="*", width=15, font=LARGE_FONT)
@@ -226,7 +229,7 @@ class Game(Frame):
                 canvas = None
                 canvas_width = 0
                 canvas_height = 0
-            group = Group(index, label, group_name, code_label, code_entry, code_button,
+            group = Group(index, group_name_label, time_label, group_name, code_label, code_entry, code_button,
                           start_button, canvas, canvas_width, canvas_height, self.clock, clue_buttons)
             self.group_list.append(group)
 

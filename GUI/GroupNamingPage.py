@@ -21,7 +21,7 @@ class GroupNamingPage(Frame):
 
     def create_group_boxes(self):
         for group in range(self.amount_of_groups):
-            group_label = Label(self, text=f"Name of group number {group+1}: ",fg='white', bg='black', font=LARGE_FONT)
+            group_label = Label(self, text=f"Name of group number {group+1}: ", fg='white', bg='black', font=LARGE_FONT)
             group_name_entry = Entry(self, font=MEDIUM_FONT)
             group_name_entry.insert(END, f"Group {group+1}")
             group_label.pack(fill=X, padx=15, pady=15)

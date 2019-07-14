@@ -12,13 +12,14 @@ from PIL import ImageTk, Image
 class Group:
     solving_password = "1966"
 
-    def __init__(self, number: int, label: Label, name: str, code_label: Label, code_entry: Entry,
+    def __init__(self, number: int, group_label: Label, time_label: Label, name: str, code_label: Label, code_entry: Entry,
                  code_button: Button, start_button: Button, canvas, width, height, clock, clue_buttons):
         self.time_string = time.strftime(clock.clock_to_str())
         self.images_coordinate = list()
         self.stop_flag = False
         self.number = number
-        self.label = label
+        self.label = group_label
+        self.time_label = time_label
         self._count = clock.time_to_seconds()
         self.deduce = 1
         self.name = name
@@ -55,7 +56,8 @@ class Group:
         self.remove_image(amount_to_deduct)
         if self.count < 300:
             self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
-            self.label.configure(text=self.name + self.time_string, fg="white")
+            self.label.configure(text=self.name, fg="white")
+            self.time_label.configure(text=self.time_string, fg='white')
             self.count = 0
         else:
             self.count -= 300
@@ -93,12 +95,14 @@ class Group:
             minute, seconds = divmod(seconds, 60)
             if hour == 0 and minute == 0 and seconds == 0:
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
-                self.label.configure(text=self.name + self.time_string, fg="white")
+                self.label.configure(text=self.name, fg="white")
+                self.time_label.configure(text=self.time_string, fg='white')
                 self.stop_flag = True
             else:
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(hour, minute, seconds)
                 self.count -= self.deduce
-                self.label.configure(text=self.name + self.time_string, fg="red")
+                self.label.configure(text=self.name, fg="red")
+                self.time_label.configure(text=self.time_string, fg='red')
             self.second_counter += 1
 
             if self.second_counter == 120:
@@ -113,7 +117,8 @@ class Group:
                 image_to_remove = math.ceil(int(self.penalty / 120))
                 self.remove_image(image_to_remove)
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
-                self.label.configure(text=self.name + self.time_string, fg="white")
+                self.label.configure(text=self.name, fg="white")
+                self.time_label.configure(text=self.time_string, fg='white')
                 self.count = 0
             else:
                 image_to_remove = math.ceil(int(self.penalty / 120))
