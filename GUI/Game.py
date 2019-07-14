@@ -216,8 +216,7 @@ class Game(Frame):
                                      fg='white', bg='black')
             time_label = Label(frame, text=self.time_string, font=CLOCK_FONT,
                                fg='white', bg='black')
-            code_label = Label(frame, text="Insert 4 digit code: ", font=LARGE_FONT,
-                               fg='white', bg='black')
+
             code_entry = EntryWithPlaceholder(frame, 'ENTER CODE')
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
@@ -232,7 +231,7 @@ class Game(Frame):
                 canvas = None
                 canvas_width = 0
                 canvas_height = 0
-            group = Group(index, group_name_label, time_label, group_name, code_label, code_entry, code_button,
+            group = Group(index, group_name_label, time_label, group_name, code_entry, code_button,
                           start_button, canvas, canvas_width, canvas_height, self.clock, clue_buttons)
             self.group_list.append(group)
 
