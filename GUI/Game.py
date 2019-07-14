@@ -8,6 +8,7 @@ from tkinter import *
 from tkinter import ttk
 from Objects.Group import Group
 from itertools import cycle
+from EntryWithPlaceHolder import EntryWithPlaceholder
 
 LARGE_FONT = ("verdana", 20)
 CLOCK_FONT = ("8514oem", 34, 'bold')
@@ -217,7 +218,7 @@ class Game(Frame):
                                fg='white', bg='black')
             code_label = Label(frame, text="Insert 4 digit code: ", font=LARGE_FONT,
                                fg='white', bg='black')
-            code_entry = Entry(frame, show="*", width=15, font=LARGE_FONT)
+            code_entry = EntryWithPlaceholder(frame, 'ENTER CODE')
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
 

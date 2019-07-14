@@ -6,13 +6,14 @@ from tkinter import Entry
 from tkinter import Button
 from tkinter import StringVar
 from tkinter import END
+from EntryWithPlaceHolder import EntryWithPlaceholder
 from PIL import ImageTk, Image
 
 
 class Group:
     solving_password = "1966"
 
-    def __init__(self, number: int, group_label: Label, time_label: Label, name: str, code_label: Label, code_entry: Entry,
+    def __init__(self, number: int, group_label: Label, time_label: Label, name: str, code_label: Label, code_entry,
                  code_button: Button, start_button: Button, canvas, width, height, clock, clue_buttons):
         self.time_string = time.strftime(clock.clock_to_str())
         self.images_coordinate = list()
@@ -25,10 +26,14 @@ class Group:
         self.name = name
         self.penalty = 600
         self.code_label = code_label
-        self.code_entered = StringVar()
-        self.code_entered.trace('w', self.limit_characters)
+        # self.code_entered = StringVar()
+        # self.code_entered.trace('w', self.limit_characters)
+
         self.code_entry = code_entry
-        self.code_entry.configure(textvariable=self.code_entered)
+        # self.code_entry.insert(0, 'ENTER CODE')
+        # self.code_entry.bind("<FocusIn>", lambda args: self.code_entry.delete('0', 'end'))
+
+        # self.code_entry.configure(textvariable=self.code_entered, show='*')
         self.code_button = code_button
         self.start_button = start_button
         self.clue_buttons = clue_buttons
