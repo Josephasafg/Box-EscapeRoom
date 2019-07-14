@@ -8,9 +8,10 @@ from tkinter import *
 from tkinter import ttk
 from Objects.Group import Group
 from itertools import cycle
+from EntryWithPlaceHolder import EntryWithPlaceholder
 
 LARGE_FONT = ("verdana", 20)
-CLOCK_FONT = ("8514oem", 24, 'bold')
+CLOCK_FONT = ("8514oem", 34, 'bold')
 
 
 class Game(Frame):
@@ -107,22 +108,25 @@ class Game(Frame):
                 ImageUtilities.place_images(group, int(group.count // 120))
                 if amount_of_group % 2 == 0:
                     group.canvas.create_window(width_even, label_height, anchor=CENTER, window=group.label)
-                    group.canvas.create_window(width_even, label_height * 3, anchor=CENTER, window=group.code_entry)
-                    group.canvas.create_window(width_even, label_height * 5, anchor=CENTER, window=group.code_button)
-                    group.canvas.create_window(width_even, label_height * 7, anchor=CENTER, window=group.start_button)
-                    group.canvas.create_window(0, label_height * 9, anchor=W, window=group.clue_buttons[0])
-                    group.canvas.create_window(0, label_height * 11, anchor=W, window=group.clue_buttons[1])
-                    group.canvas.create_window(0, label_height * 13, anchor=W, window=group.clue_buttons[2])
+                    group.canvas.create_window(width_even, label_height * 3, anchor=CENTER, window=group.time_label)
+                    group.canvas.create_window(width_even, label_height * 5, anchor=CENTER, window=group.code_entry)
+                    group.canvas.create_window(width_even, label_height * 7, anchor=CENTER, window=group.code_button)
+                    group.canvas.create_window(width_even, label_height * 9, anchor=CENTER, window=group.start_button)
+                    group.canvas.create_window(0, label_height * 11, anchor=W, window=group.clue_buttons[0])
+                    group.canvas.create_window(0, label_height * 13, anchor=W, window=group.clue_buttons[1])
+                    group.canvas.create_window(0, label_height * 15, anchor=W, window=group.clue_buttons[2])
                 else:
                     group.canvas.create_window(width_odd, label_height, anchor=CENTER, window=group.label)
-                    group.canvas.create_window(width_odd, label_height * 3, anchor=CENTER, window=group.code_entry)
-                    group.canvas.create_window(width_odd, label_height * 5, anchor=CENTER, window=group.code_button)
-                    group.canvas.create_window(width_odd, label_height * 7, anchor=CENTER, window=group.start_button)
-                    group.canvas.create_window(0, label_height * 9, anchor=W, window=group.clue_buttons[0])
-                    group.canvas.create_window(0, label_height * 11, anchor=W, window=group.clue_buttons[1])
-                    group.canvas.create_window(0, label_height * 13, anchor=W, window=group.clue_buttons[2])
+                    group.canvas.create_window(width_odd, label_height * 3, anchor=CENTER, window=group.time_label)
+                    group.canvas.create_window(width_odd, label_height * 5, anchor=CENTER, window=group.code_entry)
+                    group.canvas.create_window(width_odd, label_height * 7, anchor=CENTER, window=group.code_button)
+                    group.canvas.create_window(width_odd, label_height * 9, anchor=CENTER, window=group.start_button)
+                    group.canvas.create_window(0, label_height * 11, anchor=W, window=group.clue_buttons[0])
+                    group.canvas.create_window(0, label_height * 13, anchor=W, window=group.clue_buttons[1])
+                    group.canvas.create_window(0, label_height * 15, anchor=W, window=group.clue_buttons[2])
             else:
                 group.label.pack(padx=10, pady=10)
+                group.time_label.pack(padx=10, pady=10)
                 # group.code_label.pack()
                 group.code_entry.pack(padx=5, pady=5)
                 group.code_button.pack(padx=5, pady=5)
@@ -208,11 +212,12 @@ class Game(Frame):
                 canvas = Utilities.create_sub_canvas(frame, tup[2], tup[3], 'black')
 
             group_name = group_name + ": "
-            label = Label(frame, text=group_name + self.time_string, font=CLOCK_FONT,
-                          fg='white', bg='black')
-            code_label = Label(frame, text="Insert 4 digit code: ", font=LARGE_FONT,
+            group_name_label = Label(frame, text=group_name, font=CLOCK_FONT,
+                                     fg='white', bg='black')
+            time_label = Label(frame, text=self.time_string, font=CLOCK_FONT,
                                fg='white', bg='black')
-            code_entry = Entry(frame, show="*", width=15, font=LARGE_FONT)
+
+            code_entry = EntryWithPlaceholder(frame, 'ENTER CODE')
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
             start_button = self.create_music_buttons(frame)
 
@@ -226,7 +231,7 @@ class Game(Frame):
                 canvas = None
                 canvas_width = 0
                 canvas_height = 0
-            group = Group(index, label, group_name, code_label, code_entry, code_button,
+            group = Group(index, group_name_label, time_label, group_name, code_entry, code_button,
                           start_button, canvas, canvas_width, canvas_height, self.clock, clue_buttons)
             self.group_list.append(group)
 
