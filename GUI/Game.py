@@ -11,7 +11,9 @@ from itertools import cycle
 from Objects.EntryWithPlaceHolder import EntryWithPlaceholder
 
 LARGE_FONT = ("verdana", 20)
-CLOCK_FONT = ("8514oem", 34, 'bold')
+CLOCK_FONT = ("8514oem", 52, 'bold')
+GROUP_FONT = ("8514oem", 42, 'bold')
+MEDIUM_FONT = ("verdana", 14)
 
 
 class Game(Frame):
@@ -127,10 +129,11 @@ class Game(Frame):
             else:
                 group.label.pack(padx=10, pady=10)
                 group.time_label.pack(padx=10, pady=10)
-                # group.code_label.pack()
                 group.code_entry.pack(padx=5, pady=5)
                 group.code_button.pack(padx=5, pady=5)
                 group.start_button.pack(side=TOP, padx=10, pady=10)
+                group.dummies[0].pack(side=LEFT, padx=10, pady=20)
+                group.dummies[1].pack(side=LEFT, padx=10, pady=20)
                 for button in group.clue_buttons:
                     button.pack(side=LEFT, padx=2, pady=2)
 
@@ -211,14 +214,18 @@ class Game(Frame):
             else:
                 canvas = Utilities.create_sub_canvas(frame, tup[2], tup[3], 'black')
 
-            group_name = group_name + ": "
-            group_name_label = Label(frame, text=group_name, font=CLOCK_FONT,
+            group_name_label = Label(frame, text=group_name, font=GROUP_FONT,
                                      fg='white', bg='black')
             time_label = Label(frame, text=self.time_string, font=CLOCK_FONT,
                                fg='white', bg='black')
 
             code_entry = EntryWithPlaceholder(frame, 'ENTER CODE')
             code_button = ttk.Button(frame, text="Enter", command=self.check_code)
+
+            dummy_label1 = Label(frame, text='dummy_', bg='black', font=MEDIUM_FONT)
+            dummy_label2 = Label(frame, text='dummy_', bg='black', font=MEDIUM_FONT)
+            dummy_tup = (dummy_label1, dummy_label2)
+
             start_button = self.create_music_buttons(frame)
 
             clue_buttons = Utilities.create_clue_button_list(frame)
@@ -232,7 +239,7 @@ class Game(Frame):
                 canvas_width = 0
                 canvas_height = 0
             group = Group(index, group_name_label, time_label, group_name, code_entry, code_button,
-                          start_button, canvas, canvas_width, canvas_height, self.clock, clue_buttons)
+                          start_button, canvas, canvas_width, canvas_height, self.clock, clue_buttons, dummy_tup)
             self.group_list.append(group)
 
         self.start_button.grid(padx=10, pady=10)
@@ -245,7 +252,7 @@ class Game(Frame):
         for group in self.group_list:
             if len(group.code_entry.get()) != 0:
                 if group.check_code(group.code_entry.get()):
-                    self.stop_game()
+                    # self.stop_game()
                     tkinter.messagebox.showinfo(title="Winner",
                                                 message=f"{group.name} Won!\nTime: {group.time_string}")
 

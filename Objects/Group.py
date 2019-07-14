@@ -9,13 +9,14 @@ class Group:
     solving_password = "1966"
 
     def __init__(self, number: int, group_label: Label, time_label: Label, name: str, code_entry,
-                 code_button: Button, start_button: Button, canvas, width, height, clock, clue_buttons):
+                 code_button: Button, start_button: Button, canvas, width, height, clock, clue_buttons, dummies):
         self.time_string = time.strftime(clock.clock_to_str())
         self.images_coordinate = list()
         self.stop_flag = False
         self.number = number
         self.label = group_label
         self.time_label = time_label
+        self.dummies = dummies
         self._count = clock.time_to_seconds()
         self.deduce = 1
         self.name = name
@@ -27,6 +28,7 @@ class Group:
         self.canvas = canvas
         self.width = width
         self.height = height
+        self.win_flag = False
         self.configure_music_buttons()
         self.configure_clue_buttons()
         self.second_counter = 0
@@ -85,6 +87,11 @@ class Group:
         if not self.stop_flag:
             hour, seconds = divmod(self.count, 3600)
             minute, seconds = divmod(seconds, 60)
+            if self.win_flag:
+                self.label.configure(text=self.name, fg="green")
+                self.time_label.configure(text=self.time_string, fg='green')
+                self.stop_flag = True
+                return
             if hour == 0 and minute == 0 and seconds == 0:
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
                 self.label.configure(text=self.name, fg="white")
@@ -101,9 +108,8 @@ class Group:
                 self.remove_image()
 
     def check_code(self, i_code):
-        is_true = False
         if i_code == str(self.solving_password):
-            is_true = True
+            self.win_flag = True
         else:
             if self.count < 600:
                 image_to_remove = math.ceil(int(self.penalty / 120))
@@ -112,10 +118,12 @@ class Group:
                 self.label.configure(text=self.name, fg="white")
                 self.time_label.configure(text=self.time_string, fg='white')
                 self.count = 0
+            elif i_code == 'ENTER CODE':
+                return self.win_flag
             else:
                 image_to_remove = math.ceil(int(self.penalty / 120))
                 self.remove_image(image_to_remove)
                 self.count -= self.penalty
             self.code_entry.delete("0", END)
 
-        return is_true
+        return self.win_flag
