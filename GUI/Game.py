@@ -112,27 +112,37 @@ class Game(Frame):
                     group.canvas.create_window(width_even, label_height * 5, anchor=CENTER, window=group.code_entry)
                     group.canvas.create_window(width_even, label_height * 7, anchor=CENTER, window=group.code_button)
                     group.canvas.create_window(width_even, label_height * 9, anchor=CENTER, window=group.start_button)
-                    group.canvas.create_window(0, label_height * 11, anchor=W, window=group.clue_buttons[0])
-                    group.canvas.create_window(0, label_height * 13, anchor=W, window=group.clue_buttons[1])
-                    group.canvas.create_window(0, label_height * 15, anchor=W, window=group.clue_buttons[2])
                 else:
                     group.canvas.create_window(width_odd, label_height, anchor=CENTER, window=group.label)
                     group.canvas.create_window(width_odd, label_height * 3, anchor=CENTER, window=group.time_label)
                     group.canvas.create_window(width_odd, label_height * 5, anchor=CENTER, window=group.code_entry)
                     group.canvas.create_window(width_odd, label_height * 7, anchor=CENTER, window=group.code_button)
                     group.canvas.create_window(width_odd, label_height * 9, anchor=CENTER, window=group.start_button)
-                    group.canvas.create_window(0, label_height * 11, anchor=W, window=group.clue_buttons[0])
-                    group.canvas.create_window(0, label_height * 13, anchor=W, window=group.clue_buttons[1])
-                    group.canvas.create_window(0, label_height * 15, anchor=W, window=group.clue_buttons[2])
+
+                group.canvas.create_window(0, label_height * 11, anchor=W, window=group.clue_buttons[0])
+                group.canvas.create_window(0, label_height * 13, anchor=W, window=group.clue_buttons[1])
+                group.canvas.create_window(0, label_height * 15, anchor=W, window=group.clue_buttons[2])
             else:
-                group.label.pack(padx=10, pady=10)
-                group.time_label.pack(padx=10, pady=10)
-                # group.code_label.pack()
-                group.code_entry.pack(padx=5, pady=5)
-                group.code_button.pack(padx=5, pady=5)
-                group.start_button.pack(side=TOP, padx=10, pady=10)
-                for button in group.clue_buttons:
-                    button.pack(side=LEFT, padx=2, pady=2)
+                if amount_of_group % 2 == 0:
+                    group.label.place(x=width_even + 10, y=label_height + 20, anchor=CENTER)
+                    group.time_label.place(x=width_even + 10, y=(label_height * 3) + 30, anchor=CENTER)
+                    group.code_entry.place(x=width_even + 10, y=(label_height * 5) + 40, anchor=CENTER)
+                    group.code_button.place(x=width_even + 10, y=(label_height * 7) + 50, anchor=CENTER)
+                    group.start_button.place(x=width_even + 10, y=(label_height * 9) + 60, anchor=CENTER)
+                else:
+                    group.label.place(x=width_odd + 10, y=label_height + 20, anchor=CENTER)
+                    group.time_label.place(x=width_odd + 10, y=(label_height * 3) + 30, anchor=CENTER)
+                    group.code_entry.place(x=width_odd + 10, y=(label_height * 5) + 40, anchor=CENTER)
+                    group.code_button.place(x=width_odd + 10, y=(label_height * 7) + 50, anchor=CENTER)
+                    group.start_button.place(x=width_odd + 10, y=(label_height * 9) + 60, anchor=CENTER)
+                for index, button in enumerate(group.clue_buttons):
+                    button.place(x=400 + (index*62), y=label_height * 40)
+                # group.time_label.pack(padx=10, pady=10)
+                # group.code_entry.pack(padx=5, pady=5)
+                # group.code_button.pack(padx=5, pady=5)
+                # group.start_button.pack(side=TOP, padx=10, pady=10)
+                # for button in group.clue_buttons:
+                #     button.pack(side=LEFT, padx=2, pady=2)
 
     @staticmethod
     def create_music_buttons(frame) -> Button:
