@@ -21,7 +21,7 @@ class Group:
         self._count = clock.time_to_seconds()
         self.deduce = 1
         self.name = name
-        self.penalty = 600
+        self.penalty = 300
         self.code_entry = code_entry
         self.code_button = code_button
         self.start_button = start_button
@@ -47,16 +47,16 @@ class Group:
 
     def deduct_clue(self, button):
         button.configure(state='disabled')
-        amount_to_deduct = math.ceil(int(300 / 120))
+        amount_to_deduct = math.ceil(int(120 / 60))
         self.remove_image(amount_to_deduct)
-        if self.count < 300:
+        if self.count < 120:
             self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
             Game.Game.win_count += 1
             self.label.configure(text=self.name, fg="white")
             self.time_label.configure(text=self.time_string, fg='white')
             self.count = 0
         else:
-            self.count -= 300
+            self.count -= 120
 
     def start_clock(self):
         if self.stop_flag:
