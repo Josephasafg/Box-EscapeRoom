@@ -119,7 +119,7 @@ class Group:
         else:
             if i_code == 'ENTER CODE' or i_code == '':
                 return self.win_flag
-            elif self.count < 600:
+            elif self.count < 300:
                 image_to_remove = math.ceil(int(self.penalty / 120))
                 self.remove_image(image_to_remove)
                 self.time_string = '{:02d}:{:02d}:{:02d}'.format(0, 0, 0)
